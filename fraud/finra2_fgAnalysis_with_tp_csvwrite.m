@@ -29,12 +29,12 @@ subjects = {'ab071412','bc050913','bk032213','ch101612','cs050813', ...
             };
         
 % Set fiber groups
-fiberName = {'clean_lh_antshortins_nacc.mat', ...
+fiberName = {'clean_lh_amyg_nacc.mat', ...
              'clean_rh_antshortins_nacc.mat'};
 
 %% Set up the text file that will store the fiber vals.
 dateAndTime     = getDateAndTime;
-textFileName    = fullfile(logDir,['mrtrix_insula_nacc_fg',dateAndTime,'.csv']);
+textFileName    = fullfile(logDir,['mrtrix_amyg_nacc_fg',dateAndTime,'.csv']);
 [fid1 message]  = fopen(textFileName, 'w');
 fprintf(fid1, 'Subject_Code,Fiber_Name,Mean_FA,FA_StErr,Mean_MD,MD_StErr,Mean Radial ADC,RD StErr, Mean Axial ADC,AD StErr,Number of Fibers (arb),Mean Length,Min Length,Max Length,Mean_FA_tp,FA_std, Mean_MD_tp,MD_std,Mean_RD_tp,RD_std,Mean_AD_tp,AD_std,Mean_FA_tp60,FA_std60, Mean_MD_tp60,MD_std60,Mean_RD_tp60,RD_std60,Mean_AD_tp60,AD_std60\n');
 

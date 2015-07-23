@@ -5,11 +5,11 @@ function s_plasticity_dtiConvFSroi2mat
 %
 
 matpath  = '/media/storg/matproc';
-subjects = {'hm082514'};
+subjects = {'ad082014_2','hm082514_2','ml082214_2','yw083014_2'};
 
 for isubj = 1:length(subjects)
     % Build the file names for aseg.nii.gz
-    matProcPath   = fullfile(matpath, subjects{isubj}, 'ROIs');
+    matProcPath = fullfile(matpath, subjects{isubj});
     asegFile  = dir(fullfile(matProcPath,'a2009seg2acpc.nii.gz'));
     asegFname = asegFile.name;
     asegPath  = fullfile(matProcPath, asegFname);

@@ -9,7 +9,7 @@ function s_finra2_fe_make_wmmask_fsseg
 baseDir    = '/media/storg/fsproc/acpc';
 matProcDir = '/media/storg/matproc';
 
-subjects = {'mfb0027'};
+subjects = {'cp011513','jw101812'};
 %{
 subjects   = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
               'cs050813','dc050213','dp092612','ds080712','ec081912', ...
@@ -27,7 +27,7 @@ for isubj = 1:length(subjects)
     %fsMriFolder = fullfile(subjectFolder, 'mri');
     matRoiFolder = fullfile(matProcDir,subjects{isubj},'ROIs');
      
-    wmMaskFile = fullfile(matRoiFolder,'lh_wmmask_fs.nii.gz'); 
+    wmMaskFile = fullfile(matRoiFolder,'rh_wmmask_fs.nii.gz'); 
     [~,wmMaskFileName,~] = fileparts(wmMaskFile);
     wmMaskFileName = wmMaskFileName(1:end-4); %strip .nii after .gz
     
@@ -36,7 +36,7 @@ for isubj = 1:length(subjects)
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
     %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 2 10 11 12 13 26 28 11118 11148 11164 11124];
+    invals = [16 41 49 50 51 52 58 60 12118 12148 12164 12124];
     %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
     %rh 16 41 49 50 51 52 58 60 12118 12148 12164 12124
     origvals = unique(wm.data(:));

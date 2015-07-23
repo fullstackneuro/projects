@@ -6,9 +6,6 @@ function s_finra2_dtiConvFSroi2mat
 
 matpath  = '/media/storg/matproc';
 
-subjects = {'mfb0027'};
-
-%{
 subjects = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'cs050813','dc050213','dp092612','ds080712','ec081912', ...
             'en062813','fg092712','gr051513','hg101012','hm062513', ...
@@ -19,8 +16,9 @@ subjects = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'pw061113','ra053013','rb073112','rb082212','sd040313', ...
             'sh010813','sl080912','sn061213','sp061313','tr101312', ...
             'tw062113','vv060313','wb071812'};
-%}
-          
+        
+%{'cp011513','jw101812'};
+
 for isubj = 1:length(subjects)
     % Build the file names for aseg.nii.gz
     matProcPath   = fullfile(matpath, subjects{isubj}, 'ROIs');
@@ -29,7 +27,12 @@ for isubj = 1:length(subjects)
     asegPath  = fullfile(matProcPath, asegFname);
 
     %create mat rois based on fs seg lookup table
+    dtiConvertFreeSurferRoiToMat(asegPath, 18, 'lh_amyg_a2009s');
+    dtiConvertFreeSurferRoiToMat(asegPath, 54, 'rh_amyg_a2009s');
     %{
+    dtiConvertFreeSurferRoiToMat(asegPath, 11117, 'lh_medins_a2009s');
+    dtiConvertFreeSurferRoiToMat(asegPath, 12117, 'rh_medins_a2009s');
+
     dtiConvertFreeSurferRoiToMat(asegPath, 26, 'lh_nacc_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 58, 'rh_nacc_aseg');
     
@@ -50,8 +53,13 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 51, 'rh_put_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 13, 'lh_pal_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 52, 'rh_pal_aseg');
-    %}
+    
     dtiConvertFreeSurferRoiToMat(asegPath, 41, 'rh_wmseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 2, 'lh_wmseg');
-
+    
+    dtiConvertFreeSurferRoiToMat(asegPath, 16, 'brainstem_aseg');
+    dtiConvertFreeSurferRoiToMat(asegPath, 28, 'lh_ventraldc_aseg');
+    dtiConvertFreeSurferRoiToMat(asegPath, 60, 'rh_ventraldc_aseg');
+    %}
+    
 end

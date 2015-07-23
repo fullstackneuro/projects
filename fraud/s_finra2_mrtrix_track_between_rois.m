@@ -1,28 +1,28 @@
 function fibersPDB = s_finra2_mrtrix_track_between_rois
 %
 % This functions shows how to track between two ROIS using mrtrix.
-% This s very helpful for ideintifying some fiber groups for example the
+% This si very helpful for ideintifying some fiber groups for example the
 % optic radiation.
 %
-% This is how te code works.
-% 1. We load two ROIs in the brai, for Shumpei's project for example we
+% This is how the code works.
+% 1. We load two ROIs in the brain, for Shumpei's project for example we
 %    will load the right-LGN and the right-Visual cortex
 % 2. We create union ROI by combining these two ROIs. The union ROI is used
-%    as seeding fro the fibers. mrtrix will initiate and terminate fibers only
+%    as seeding for the fibers. mrtrix will initiate and terminate fibers only
 %    within the volume defined by the Union ROI.
-% 3. We create a white matter mask. THis mask is generally a large portion
+% 3. We create a white matter mask. This mask is generally a large portion
 %    of the white matter. A portion that contains both union ROIs. For example
 %    the right hemisphere.
 % 4. We use mrtrix to track between the right-LGN and righ-visual cortex.
-% mrtrix will initiate fibers by seeding within the UNION ROI and it will
-% only keep fibers that have paths within the white matter masks.
+%    mrtrix will initiate fibers by seeding within the UNION ROI and it will 
+%    only keep fibers that have paths within the white matter masks.
 %
-% The final result of this script is to generate lot's of canddte fibers 
-% that specifically end and start from the ROI of interest. Thisis an 
-% approach similar to Contrack. 
+% The final result of this script is to generate lot's of candidate fibers 
+% that specifically end and start from the ROI of interest. This is a similar 
+% approach to Contrack. 
 %
 % INPUTS: none
-% OUTPUTS: the finela name of the ROI created at each iteration
+% OUTPUTS: the final name of the ROI created at each iteration
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
@@ -37,9 +37,8 @@ subjects = {'ab071412','bc050913','bk032113','ch101612', ...
             'np072412','pf020113','pl061413','ps022013','pw060713', ...
             'pw061113','ra053013','rb073112','rb082212','sd040313', ...
             'sh010813','sl080912','sn061213','sp061313','tr101312', ...
-            'tw062113','vv060313','wb071812', ...  
-            };
-        
+            'tw062113','vv060313','wb071812'};
+      
 for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
@@ -49,12 +48,12 @@ for isubj = 1:length(subjects)
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix/');
     
     % We want to track the subcortical pathway
-    fromRois = {'vta_4mm'};
-    toRois   = {'lh_nacc_aseg_fd','lh_shortin_a2009s'};
+    fromRois = {'lh_amyg_a2009s'};
+    toRois   = {'lh_nacc_aseg_fd'};
     
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
-    lmax    = [6]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
+    lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
     maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
     wmMask  = [];
@@ -64,7 +63,7 @@ for isubj = 1:length(subjects)
     %
     % We use a nifti ROi to select the portion of the White matter to use for
     % seeding
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/lh_wmmask_fs_fd_clip_vtanacc');
+    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/lh_wmmask_amyg_fd');
     [~, wmMaskName] = dtiRoiNiftiFromMat(wmMaskName,refImg,wmMaskName,1);
     
     % Then transform the niftis into .mif

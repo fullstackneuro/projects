@@ -2,7 +2,7 @@
 %
 %MAKE SURE TO EDIT HEMISPHERE
 
-subjects = {'ab071412'};
+subjects = {'lc052213'};
             
             %'bc050913','bk032113','ch101612','cs050813', ...
             %'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...

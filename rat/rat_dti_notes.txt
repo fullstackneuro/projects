@@ -1,0 +1,22 @@
+rat dti notes 150107
+
+phase encode dir = row (use 1 in dtiInit)
+
+Possible reasons for problem:
+1) dtiInit uses mrtrix brainmask to exclude voxels in rest of tensor calculations
+2) bad acpc-xform
+3) bad ec-xform
+4) bounding box?
+
+Issues:
+aligning t1 to acpc
+producing quality acpc
+brainmask from MRTRIX processing is not good
+dtiInit produces bad bounding box
+
+alternative:
+a) align t1 to acpc or tlrch using fsl or afni
+b) produce brainmask from t1-acpc in fsl or afni
+c) align and resample dti data to t1-acpc in fsl
+d) manually produ
+e) port all data into mrDiffusion

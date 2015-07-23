@@ -5,7 +5,7 @@ function s_dtiInit_across_subjects
 %
 
 datapath = '/media/storg/matproc';
-subjects = {'yw083014_hardi1','yw083014_hardi2','yw083014_hardi3'};       
+subjects = {'cp011513','jw101812'};       
             %{
             'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'cs050813','dc050213','dp092612','ds080712','ec081912', ...
@@ -18,7 +18,7 @@ subjects = {'yw083014_hardi1','yw083014_hardi2','yw083014_hardi3'};
             'sh010813','sl080912','sn061213','sp061313','tr101312', ...
             'tw062113','vv060313','wb071812' 
             %}
-        
+        %new finra subs 'cp011513','jw101812'
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals

@@ -2,14 +2,7 @@
 %
 %MAKE SURE TO EDIT HEMISPHERE
 
-subjects = { 'ab071412','bc050913','bk032113','ch101612','cs050813', ...
-            'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...
-            'gr051513','hg101012','hm062513','jh042913','jo081312', ...
-            'jt062413','jw072512','kr030113','lf052813','lw061713', ...
-            'md072512','mk021913','ml061013','mn052313','ms082112','na060213', ...
-            'np072412','pf020113','pl061413','ps022013','pw060713','pw061113', ...
-            'ra053013','rb073112','rb082212','sd040313','sh010813','sl080912', ...
-            'sn061213','sp061313','tr101312','tw062113','vv060313','wb071812'};
+subjects = {'lc052213'};
     
             %all subjects
             %'ab071412','bc050913','bk032113','bk053012','ch101612','cs050813', ...
@@ -32,7 +25,7 @@ for isubj = 1:length(subjects)
     subjectFolder = fullfile(baseDir, subjectDir);
     
     % make life folder if doesn't exist
-    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/conTrack/mesolimbic/life/rh_nowbc');
+    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/conTrack/mesolimbic/life/lh_nowbc');
         if ~exist(lifeFolder,'dir'); mkdir(lifeFolder); end 
         
     % T1 high resolution anatomy
@@ -44,14 +37,14 @@ for isubj = 1:length(subjects)
     sub_wbc       = fullfile(fibersFolder, 'lmax2_wbc.mat');
     
     conTrackFolder = fullfile(subjectFolder, '/dti96trilin/fibers/conTrack/mesolimbic');
-    sub_roi2roi_track = fullfile(conTrackFolder, 'clean_rh_vta_nacc.mat');
+    sub_roi2roi_track = fullfile(conTrackFolder, 'clean_lh_vta_nacc.mat');
        
     % ROIs and WM masks
     roiFolder        = fullfile(baseDir, subjectDir, '/ROIs');
-    sub_wmmask_track = fullfile(roiFolder, 'rh_wmmask_fs_fd_clip_vtanacc.nii.gz');
+    sub_wmmask_track = fullfile(roiFolder, 'lh_wmmask_fs_fd_clip_vtanacc.nii.gz');
     
     roiBinFolder = fullfile(subjectFolder, '/dti96trilin/bin');
-    sub_roi1 = fullfile(roiBinFolder, 'vta_4mm_rh_nacc_aseg_fd_2014-09-12_12.40.44.nii.gz');
+    sub_roi1 = fullfile(roiBinFolder, 'vta_4mm_lh_nacc_aseg_fd_2014-09-12_12.42.14.nii.gz');
     %sub_roi2 = fullfile(roiFolder, 'lh_nacc_aseg_fd.nii.gz');
     
     % DWI files
@@ -90,7 +83,8 @@ for isubj = 1:length(subjects)
     
     % (7) Build the LiFE model
     fe = feConnectomeInit(sub_dwi_processed, ...
-        wbcMerged,'WBC_TOI', ...
+        wbcMerged, ...
+        'WBC_TOI', ...
         fibersFolder, ...
         sub_dwi_processed, ...
         sub_t1w_acpc);
@@ -122,7 +116,7 @@ for isubj = 1:length(subjects)
     end
     
     % saves strength of evidence for subject
-    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_rh_se_nowbc.mat']);
+    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_lh_se_nowbc.mat']);
     save(subjectSeName, 'se');
     
     % close figures for subject

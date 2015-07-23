@@ -6,8 +6,6 @@ function s_finra2_merge_save_rois
 
 datapath = '/media/storg/matproc';
 
-subjects = {'mfb0027'};
-%{
 subjects = {'ab071412','bc050913','bk032113','ch101612', ...
             'cs050813','dc050213','dp092612','ds080712','ec081912', ...
             'en062813','fg092712','gr051513','hg101012','hm062513', ...
@@ -22,9 +20,9 @@ subjects = {'ab071412','bc050913','bk032113','ch101612', ...
 %}
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath,subjects{isubj},'ROIs');
-    roi1    = dtiReadRoi(fullfile(roiPath,'rh_shortins_a2009s.mat'));
-    roi2    = dtiReadRoi(fullfile(roiPath,'rh_wmseg_nacc.mat'));
-    newRoiName = fullfile(roiPath,'rh_wmseg_naccins.mat');
+    roi1    = dtiReadRoi(fullfile(roiPath,'rh_medins_a2009s.mat'));
+    roi2    = dtiReadRoi(fullfile(roiPath,'rh_infins_a2009s.mat'));
+    newRoiName = fullfile(roiPath,'rh_postins.mat');
     newRoi     = dtiMergeROIs(roi1,roi2);
     dtiWriteRoi(newRoi, newRoiName)
 end

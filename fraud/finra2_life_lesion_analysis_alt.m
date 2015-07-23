@@ -2,7 +2,7 @@
 %
 %MAKE SURE TO EDIT HEMISPHERE
 
-subjects = {'ab071412'};
+subjects = {'lc052213'};
             %'bc050913','bk032113','ch101612','cs050813', ...
             %'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...
             %'gr051513','hg101012','hm062513','jh042913','jl071912','jo081312', ...
@@ -31,7 +31,7 @@ for isubj = 1:length(subjects)
     subjectFolder = fullfile(baseDir, subjectDir);
     
     % make life folder if doesn't exist
-    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/life/lh_nowbc');
+    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/life/rh_nowbc');
         if ~exist(lifeFolder,'dir'); mkdir(lifeFolder); end 
         
     % T1 high resolution anatomy
@@ -41,13 +41,13 @@ for isubj = 1:length(subjects)
     % Fibers and tracts
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix');
     sub_wbc       = fullfile(fibersFolder, 'lmax10_wbc.mat');
-    sub_roi2roi_track = fullfile(fibersFolder, 'clean_lh_antshortins_nacc.mat');
+    sub_roi2roi_track = fullfile(fibersFolder, 'clean_rh_antshortins_nacc.mat');
        
     % ROIs and WM masks
     roiFolder        = fullfile(baseDir, subjectDir, '/ROIs');
-    sub_wmmask_track = fullfile(roiFolder, 'lh_wmmask_fs_fd_clip_insnacc.nii.gz');
-    sub_roi1 = fullfile(roiFolder, 'lh_antshortins_fd.nii.gz');
-    sub_roi2 = fullfile(roiFolder, 'lh_nacc_aseg_fd.nii.gz');
+    sub_wmmask_track = fullfile(roiFolder, 'rh_wmmask_fs_fd_clip_insnacc.nii.gz');
+    sub_roi1 = fullfile(roiFolder, 'rh_antshortins_fd.nii.gz');
+    sub_roi2 = fullfile(roiFolder, 'rh_nacc_aseg_fd.nii.gz');
     
     % DWI files
     fullsubjectAcqName = dir(fullfile(subjectFolder, '*.bvals'));
@@ -117,7 +117,7 @@ for isubj = 1:length(subjects)
     end
     
     % saves strength of evidence for subject
-    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_lh_se_nowbc.mat']);
+    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_rh_se_nowbc.mat']);
     save(subjectSeName, 'se');
     
     % close figures for subject

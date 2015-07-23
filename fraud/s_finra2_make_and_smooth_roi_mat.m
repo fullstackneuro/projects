@@ -8,7 +8,9 @@ function s_finra2_make_and_smooth_roi_mat
 
 datapath = '/media/storg/matproc';
 
-subjects = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
+subjects = {'jw101812'};
+%{
+'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'cs050813','dc050213','dp092612','ds080712','ec081912', ...
             'en062813','fg092712','gr051513','hg101012','hm062513', ...
             'jh042913','jl071912','jo081312','jt062413','jw072512', ...
@@ -18,13 +20,13 @@ subjects = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'pw061113','ra053013','rb073112','rb082212','sd040313', ...
             'sh010813','sl080912','sn061213','sp061313','tr101312', ...
             'tw062113','vv060313','wb071812'};
-        
+%}       
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
-    roi = dir(fullfile(roiPath,'rh_wmmask_fs.mat'));
+    roi = dir(fullfile(roiPath,'lh_wmmask_fs.mat'));
     oldRoi = roi.name;
     oldRoiPath = fullfile(roiPath, oldRoi);
-    outRoi = [roiPath '/rh_wmmask_fs_fd.mat'];
+    outRoi = [roiPath '/lh_wmmask_fs_fd.mat'];
     smoothKernel = 0; % size of the 3D smoothing Kernel in mm
     %operations   = ['fillholes', 'dilate', 'removesat']; 
     operations   = [1, 1, 0]; 
