@@ -3,7 +3,7 @@
 baseDir = '/media/storg/matproc';
 figuresDir = '/media/storg/matproc/figures';
     
-subjects = {'ch101612','cs050813', ...
+subjects = {'ab071412','bc050913','ch101612','cs050813', ...
             'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...
             'gr051513','hg101012','hm062513','jh042913','jl071912','jo081312', ...
             'jt062413','jw072512','kr030113','lc052213','lf052813','lw061713', ...
@@ -11,7 +11,8 @@ subjects = {'ch101612','cs050813', ...
             'np072412','pf020113','pl061413','ps022013','pw060713','pw061113', ...
             'ra053013','rb073112','rb082212','sd040313','sh010813','sl080912', ...
             'sn061213','sp061313','tr101312','tw062113','vv060313','wb071812'};
-   %'ab071412','bc050913','bk032213'     
+   %,'bk032213'
+
 for isubj = 1:length(subjects)
     %folders
     t1name = ['/media/storg/matproc/' subjects{isubj} '/' subjects{isubj} '_t1_acpc.nii.gz'];
@@ -49,11 +50,11 @@ for isubj = 1:length(subjects)
     %[fh, lh] = mbaDisplayConnectome(lmpfc.fibers,fgh,[0.7,0.98,0.98],'single',[],[],.3);
     %delete(lh);
     %[fh, lh] = mbaDisplayConnectome(lvta.fibers,fgh,[.96,0.84,0.6],'single',[],[],.3);
-    view(0,90);
-    axis([-50 0 -20 40]);
-    lh = lightangle(230,45);
+    view(240,8);
+    axis([-60 0 -40 60 -30 40]);
+    lh = lightangle(230,20);
     %save fig
-    lfigurename = [subjects{isubj} '_lh_uncusamyginsnacc_axial'];
+    lfigurename = [subjects{isubj} '_lh_uncusamyginsnacc_sag'];
     feSavefig(fh,'figName',lfigurename,'figDir','/media/storg/matproc/figures/mbafigs','figType','jpg')
     
     %right hemisphere
@@ -79,10 +80,10 @@ for isubj = 1:length(subjects)
     delete(lh);
     [fh, lh] = mbaDisplayConnectome(rinsula.fibers,fgh,[0.7,0.4,0.4],'single',[],[],.3);
     delete(lh);
-    view(0,90);
-    axis([0 50 -20 40]);
-    lh = lightangle(130,45);
+    view(120,8);
+    axis([0 60 -40 60 -30 40]);
+    lh = lightangle(130,20);
     %save figure
-    rfigurename = [subjects{isubj} '_rh_uncusamyginsnacc_axial'];
+    rfigurename = [subjects{isubj} '_rh_uncusamyginsnacc_sag'];
     feSavefig(fh,'figName',rfigurename,'figDir','/media/storg/matproc/figures/mbafigs','figType','jpg')
 end

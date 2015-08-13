@@ -1,4 +1,4 @@
-function s_finra2_clean_mfbafiberoutlier_amygnacc
+function s_finra2_clean_mfbafiberoutlier_postinsnacc
 %script to cleaning fiber group outliers (posterior insula - nacc)
 
 baseDir = '/media/storg/matproc/';
