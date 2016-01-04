@@ -1,4 +1,4 @@
-function fibersPDB = s_vlpfc_mrtrix_track_vlpfc_antins
+function fibersPDB = s_vlpfc_mrtrix_track_dlpfc_caudate
 %
 % This functions shows how to track between two ROIS using mrtrix.
 % This si very helpful for ideintifying some fiber groups for example the
@@ -48,8 +48,8 @@ for isubj = 1:length(subjects)
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix/');
     
     % We want to track the subcortical pathway
-    fromRois = {'rh_frontorb_a2009s'};
-    toRois   = {'rh_antins_a2009s','rh_shortins_a2009s'};
+    fromRois = {'rh_caud_aseg'};
+    toRois   = {'rh_latorb_a2009s_fd','rh_frontorb_a2009s_fd','rh_frontinfang_a2009s_fd'};
     wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_vlpfc_fd');
 
     % Set up the MRtrix tracking parameters

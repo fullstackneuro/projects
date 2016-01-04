@@ -14,19 +14,25 @@ subjects = {'ds080712'};
             'sn061213','sp061313','tr101312','tw062113','vv060313','wb071812'};
 %}
 %load t1
-ti = niftiRead('/media/storg/matproc/ds080712/ds080712_t1_acpc.nii.gz');
+ti = niftiRead('/media/storg/matproc/dp092612/dp092612_t1_acpc.nii.gz');
 %load insula tract
-mrtrix_wd = '/media/storg/matproc/ds080712/dti96trilin/fibers/mrtrix';
+mrtrix_wd = '/media/storg/matproc/dp092612/dti96trilin/fibers/mrtrix';
 rh_insula = fullfile(mrtrix_wd,'clean_rh_antshortins_nacc.mat');
 rinsula = fgRead(rh_insula);
+lh_insula = fullfile(mrtrix_wd,'clean_lh_antshortins_nacc.mat');
+linsula = fgRead(lh_insula);
 rfgh = figure('position',[0 0 1000 900]);
 mbaDisplayBrainSlice(ti,[0 10 0])
 hold on
 [rfgh, rlh] = mbaDisplayConnectome(rinsula.fibers,rfgh,[0.7,0.4,0.4],'single',[],[],0.3);
 delete(rlh);
-view(0,5);
-rlh = lightangle(0,50);
-axis([0 60 -50 90 -9 70]);
+[rfgh, rlh] = mbaDisplayConnectome(linsula.fibers,rfgh,[0, 0.20, 0.38],'single',[],[],0.3);
+delete(rlh)
+view(180,0);
+rlh = lightangle(180,20);
+feSavefig(rfgh,'figName','ainsnacccoronal','figDir','/media/storg/matproc/figures/cover','figType','jpg')
+
+
 
 
 lh_insula = fullfile(mrtrix_wd,'clean_lh_antshortins_nacc.mat');

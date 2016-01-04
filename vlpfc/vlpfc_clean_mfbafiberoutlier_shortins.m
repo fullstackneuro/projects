@@ -13,11 +13,11 @@ subjects = {'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'tw062113','vv060313','wb071812'};
 
 baseDir = '/media/storg/matproc/';        
-subjects = 'bk032113';
+subjects = 'np072412';
 fibersFolder  = fullfile(baseDir, subjects, '/dti96trilin/fibers/mrtrix/');
     
 %load fiber group, clean outliers, save cleaned fiber group
-cd('/media/storg/matproc/pf020113/dti96trilin/fibers/mrtrix');
+cd(fibersFolder);
 %manually load fiber group, clean outliers, save cleaned fiber group
 rh_fg_name = mrvSelectFile('r',{'*.mat';'*.*'}, 'Select fiber group file');
 rh_fg_unclean = fgRead(rh_fg_name);

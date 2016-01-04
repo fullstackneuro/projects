@@ -1,8 +1,6 @@
 % making afq subject dirs for AFQ_run
 afq_dir = '/media/storg/matproc/';
 
-subjects = {'mfb0027/dti60trilin'};
-
 subjects = {'03673/dti64trilin','07065/dti64trilin','07428/dti64trilin', ...
             '10339/dti64trilin','10981/dti64trilin','10984/dti64trilin', ...
             '11240/dti64trilin','12156/dti64trilin','12627/dti64trilin', ...
@@ -15,8 +13,12 @@ subjects = {'03673/dti64trilin','07065/dti64trilin','07428/dti64trilin', ...
             'pw061113/dti96trilin','ra053013/dti96trilin','rb073112/dti96trilin', ...
             'rb082212/dti96trilin','sh010813/dti96trilin','sl080912/dti96trilin','tw062113/dti96trilin'};
         
+
+subjects = {'mac03218_1/dti64trilin','mac03218_2/dti64trilin','mac12826_1/dti64trilin','mac12826_2/dti64trilin', ...
+            'mac18000_1/dti64trilin','mac18000_2/dti64trilin'};        
+        
 afq_subs = strcat(afq_dir, subjects);
 
-afq_group = [0];
-         
-   
+afq_group = repmat(0,1,length(subjects));         
+
+AFQ_run(afq_subs, afq_group)

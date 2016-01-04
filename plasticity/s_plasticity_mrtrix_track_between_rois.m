@@ -26,13 +26,21 @@ function fibersPDB = s_plasticity_mrtrix_track_between_rois
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-subjects={'ad082014_hardi1','ad082014_hardi2','ad082014_hardi3'};
-    
-baseDir = '/media/storg/matproc2/';
+subjects = {'mm080915_1_hardi1','mm080915_1_hardi2','mm080915_1_hardi3','mm080915_1_hardi4', ...
+            'mm080915_2_hardi1','mm080915_2_hardi2','mm080915_2_hardi3','mm080915_2_hardi4', ...
+            'nb081015_1_hardi1','nb081015_1_hardi2','nb081015_1_hardi3','nb081015_1_hardi4', ...
+            'nb081015_2_hardi1','nb081015_2_hardi2','nb081015_2_hardi3','nb081015_2_hardi4'};
+%{
+'ld080115_1_hardi1','ld080115_1_hardi2','ld080115_1_hardi3','ld080115_1_hardi4', ...
+          'ld080115_2_hardi1','ld080115_2_hardi2','ld080115_2_hardi3','ld080115_2_hardi4', ...
+          'lp080215_1_hardi1','lp080215_1_hardi2','lp080215_1_hardi3','lp080215_1_hardi4', ...
+          'lp080215_2_hardi1','lp080215_2_hardi2','lp080215_2_hardi3','lp080215_2_hardi4'};
+%}    
+baseDir = '/media/storg/matproc/';
 
 for isubj = 1:length(subjects)
     subjectDir = [subjects{isubj}];
-    origSubjName = subjectDir(1:8);
+    origSubjName = subjectDir(1:10);
     subjectRefImg = [origSubjName '_t1_acpc.nii.gz'];
     dtFile = fullfile(baseDir, subjectDir, '/dti96trilin/dt6.mat');
     refImg = fullfile(baseDir, subjectDir, subjectRefImg);
@@ -40,13 +48,13 @@ for isubj = 1:length(subjects)
     
     % We want to track the cortical pathway (LGN -> V   1/V2 and V1/V2 -> MT)
     fromRois = {'rh_nacc_aseg'};
-    toRois   = {'rh_mpfc_4mm'};
+    toRois   = {'rh_antshortins_fd'};
     
     % Set upt the MRtrix trakign parameters
     trackingAlgorithm = {'prob'};
-    lmax    = [8]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
-    maxNFibers2try2find  = 10000; % 10000; % this the number of fibers to find
-    maxNFibers2try = 1000000; %1000000; % this is the max number of fibers to try before giving up
+    lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
+    maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
+    maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
     wmMask  = [];
     
     % Make an (include) white matter mask ROI. This mask is the smallest
@@ -54,7 +62,7 @@ for isubj = 1:length(subjects)
     %
     % We use a nifti ROi to select the portion of the White matter to use for
     % seeding
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_mpfc_merge_clip');
+    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_fs_fd');
     [~, wmMaskName] = dtiRoiNiftiFromMat(wmMaskName,refImg,wmMaskName,1);
     
     % Then transform the niftis into .mif
@@ -117,7 +125,7 @@ for isubj = 1:length(subjects)
         roiUnion        = roi1; % seed union roi with roi1 info
         roiUnion.name   = ['union of ' roi1.name ' and ' roi2.name]; % r lgn calcarine';
         roiUnion.coords = vertcat(roiUnion.coords,roi2.coords);
-        roiName         = fullfile(baseDir, subjectDir, '/ROIs/',[roi1.name '_' roi2.name '_union_curv1_step02']);
+        roiName         = fullfile(baseDir, subjectDir, '/ROIs/',[roi1.name '_' roi2.name]);
         [~, seedMask]   = dtiRoiNiftiFromMat(roiUnion,refImg,roiName,1);
         seedRoiNiftiName= sprintf('%s.nii.gz',seedMask);
         seedRoiMifName  = sprintf('%s.mif',seedMask);

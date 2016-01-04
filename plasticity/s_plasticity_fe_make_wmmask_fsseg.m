@@ -6,11 +6,13 @@ function s_plasticity_fe_make_wmmask_fsseg
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
 % Get the base directory for the data
-baseDir = '/media/storg/fsproc/acpc';
 matProcDir = '/media/storg/matproc';
-subjects = {'ml082214', ...
-            };
-
+subjects = {'lt081615_1','lt081615_2'};
+%{
+'mm080915_1','mm080915_2','nb081015_1','nb081015_2
+'ad082014','ad082014_2','yw083014','yw083014_2','hm082514','hm082514_2','ml082214','ml082214_2', ...
+            'ld080115_1','ld080115_2','lp080215_1','lp080215_2'};
+%}
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
     %fsMriFolder = fullfile(subjectFolder, 'mri');
@@ -24,10 +26,12 @@ for isubj = 1:length(subjects)
         
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
+           
     %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 41 49 50 51 52 58 60];
-    %lh 16 2 10 11 12 13 26 28
-    %rh 16 41 49 50 51 52 58 60
+    invals = [16 41 49 50 51 52 58 60 12118 12148 12164 12124];
+    %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
+    %rh 16 41 49 50 51 52 58 60 12118 12148 12164 12124
+    
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;

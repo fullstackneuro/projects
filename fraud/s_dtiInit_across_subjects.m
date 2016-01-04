@@ -5,7 +5,7 @@ function s_dtiInit_across_subjects
 %
 
 datapath = '/media/storg/matproc';
-subjects = {'cp011513','jw101812'};       
+subjects = {'yw083014_7mm_1'};       
             %{
             'ab071412','bc050913','bk032113','bk053012','ch101612', ...
             'cs050813','dc050213','dp092612','ds080712','ec081912', ...

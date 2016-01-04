@@ -5,8 +5,9 @@ function s_plasticity_dtiInit
 
 datapath = '/media/storg/matproc';
 
-subjects = {'ad082014_2_hardi2','ad082014_2_hardi3'};
+subjects = {'ld080115_1_hardi1','ld080115_1_hardi2','ld080115_1_hardi3','ld080115_1_hardi4'};
 
+%'ld080115_2_hardi1','ld080115_2_hardi2','ld080115_2_hardi3','ld080115_2_hardi4', ...};
 %{
            align to T1 from session 1
 'ad082014_hardi1','ad082014_hardi2','ad082014_hardi3', ...

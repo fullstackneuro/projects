@@ -5,9 +5,8 @@ function s_mac_dtiInit_across_subjects
 %
 
 datapath = '/media/storg/matproc';
-subjects = {'11240', ...
-            '12156','12627','12671','13106','13733'};
-            %'03673','10339',07065','07428','10981','10984'
+subjects = {'mac03218_1','mac03218_1'};
+
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
