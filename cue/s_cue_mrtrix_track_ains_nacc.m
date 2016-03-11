@@ -1,4 +1,4 @@
-function fibersPDB = s_cue_mrtrix_track_vlpfc_shortins
+function fibersPDB = s_cue_mrtrix_track_ains_nacc
 %
 % This functions shows how to track between two ROIS using mrtrix.
 % This si very helpful for ideintifying some fiber groups for example the
@@ -28,23 +28,15 @@ function fibersPDB = s_cue_mrtrix_track_vlpfc_shortins
 
 baseDir = '/media/storg/matproc/';
 
-subjects = {'ab071412','bc050913','bk032113','ch101612','cs050813', ...
-            'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...
-            'gr051513','hg101012','hm062513','jh042913','jl071912','jo081312', ...
-            'jt062413','jw072512','kr030113','lc052213','lf052813','lw061713', ...
-            'md072512','mk021913','ml061013','mn052313','ms082112','na060213', ...
-            'np072412','pf020113','pl061413','ps022013','pw060713','pw061113', ...
-            'ra053013','rb073112','rb082212','sd040313','sh010813','sl080912', ...
-            'sn061213','sp061313','tr101312','tw062113','vv060313','wb071812'};
+subjects = {'as160129','bp160213','cs160214','kl160122', ...
+            'rp160205','ss160205','wh160130'};
 %{
 89 diff dir ='nb160221',         
-'as160129','bp160213','cs160214','kl160122', ...
-            'rp160205','ss160205','wh160130', ...
-            'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
+'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
             'jv151030','ps151001','si151120','sr151031','tf151127','vm151031', ...
             'wr151127','zl150930'
 %}
-            
+
 for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
@@ -54,8 +46,8 @@ for isubj = 1:length(subjects)
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix/');
     
     % We want to track the subcortical pathway
-    fromRois = {'lh_shortins_a2009s_fd'};
-    toRois   = {'lh_frontorb_a2009s_fd'};
+    fromRois = {'lh_nacc_aseg'};
+    toRois   = {'lh_antshortins_fd'};
     wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/lh_wmmask_fs_fd');
 
     % Set up the MRtrix tracking parameters
@@ -63,8 +55,8 @@ for isubj = 1:length(subjects)
     lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
     maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
-    cutoff = 0.1; %FA cutoff along path
-    initcutoff = 0.1; %FA cutoff at seed
+    cutoff = 0.075; %FA cutoff along path
+    initcutoff = 0.05; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
     wmMask  = [];

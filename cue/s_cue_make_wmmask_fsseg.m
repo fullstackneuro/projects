@@ -9,14 +9,27 @@ function s_cue_make_wmmask_fsseg
 %baseDir    = '/media/storg/fsproc/acpc';
 matProcDir = '/media/storg/matproc';
 
-subjects = {'aa151010','al151016','dw151003','ps151001','zl150930'};
-
+subjects = {'ab071412','bc050913','bk032113','ch101612','cs050813', ...
+            'dc050213','dp092612','ds080712','ec081912','en062813','fg092712', ...
+            'gr051513','hg101012','hm062513','jh042913','jl071912','jo081312', ...
+            'jt062413','jw072512','kr030113','lc052213','lf052813','lw061713', ...
+            'md072512','mk021913','ml061013','mn052313','ms082112','na060213', ...
+            'np072412','pf020113','pl061413','ps022013','pw060713','pw061113', ...
+            'ra053013','rb073112','rb082212','sd040313','sh010813','sl080912', ...
+            'sn061213','sp061313','tr101312','tw062113','vv060313','wb071812'};
+%{
+'as160129','bp160213','cs160214','kl160122', ...
+            'nb160221','rp160205','ss160205','wh160130''aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
+            'jv151030','ps151001','si151120','sr151031','tf151127','vm151031', ...
+            'wr151127','zl150930'
+%}
+        
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
     %fsMriFolder = fullfile(subjectFolder, 'mri');
     matRoiFolder = fullfile(matProcDir,subjects{isubj},'ROIs');
      
-    wmMaskFile = fullfile(matRoiFolder,'rh_wmmask_fs.nii.gz'); 
+    wmMaskFile = fullfile(matRoiFolder,'lh_wmmask_fs.nii.gz'); 
     [~,wmMaskFileName,~] = fileparts(wmMaskFile);
     wmMaskFileName = wmMaskFileName(1:end-4); %strip .nii after .gz
     
@@ -25,9 +38,9 @@ for isubj = 1:length(subjects)
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
     %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 41 49 50 51 52 58 60 12113 12118 12148 12164 12124];
-    %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
-    %rh 16 41 49 50 51 52 58 60 12113 12118 12148 12164 12124
+    invals = [16 2 10 11 12 13 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124];
+    %lh 16 2 10 11 12 13 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124
+    %rh 16 41 49 50 51 52 58 60 12113 12114 12117 12118 12148 12149 12163 12164 12124
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;

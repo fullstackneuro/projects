@@ -5,8 +5,11 @@ function s_cue_smooth_wmmask
 % removal of satellites.
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
-datapath = '/media/storg/matproc';
-subjects = {'aa151010','al151016','dw151003','ps151001','zl150930'};
+datapath = '/media/lcne/matproc';
+
+subjects = {'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
+            'jv151030','ps151001','si151120','sr151031','tf151127','tm161017','vm151031', ... 
+            'wr151127','zl150930'};
 
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');

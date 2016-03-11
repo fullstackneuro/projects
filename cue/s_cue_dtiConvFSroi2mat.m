@@ -6,7 +6,13 @@ function s_cue_dtiConvFSroi2mat
 
 matpath  = '/media/storg/matproc';
 
-subjects = {'aa151010','al151016','dw151003','ps151001','zl150930'};
+subjects = {'as160129','bp160213','cs160214','kl160122', ...
+            'nb160221','rp160205','ss160205','wh160130'};
+%{
+'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
+            'jv151030','ps151001','si151120','sr151031','tf151127','vm151031', ...
+            'wr151127','zl150930'
+%}
 
 for isubj = 1:length(subjects)
     % Build the file names for aseg.nii.gz
@@ -26,7 +32,7 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 12114, 'rh_frontinfang_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 18, 'lh_amyg_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 54, 'rh_amyg_a2009s');
-    %{
+    
     dtiConvertFreeSurferRoiToMat(asegPath, 11117, 'lh_medins_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 12117, 'rh_medins_a2009s');
 
@@ -57,5 +63,5 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 16, 'brainstem_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 28, 'lh_ventraldc_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 60, 'rh_ventraldc_aseg');
-   %}
+    
 end
