@@ -3,9 +3,9 @@ function s_gen_dtiInit
 % This function loads a series of subjects and performs dtiInit for each
 %
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {...};
+subjects = {'ss160804','am160805'};
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
@@ -21,5 +21,6 @@ for isubj = 1:length(subjects)
     dwiParams = dtiInitParams;
     %dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
+    dwiParams.rotateBvecsWithCanXform = true;
     dtiInit(dwiFile, t1File, dwiParams);
 end

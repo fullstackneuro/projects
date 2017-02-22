@@ -1,36 +1,46 @@
 function fibersPDB = s_els_mrtrix_track_between_rois
 %
 % This functions shows how to track between two ROIS using mrtrix.
-% This s very helpful for ideintifying some fiber groups for example the
+% This si very helpful for ideintifying some fiber groups for example the
 % optic radiation.
 %
-% This is how te code works.
-% 1. We load two ROIs in the brai, for Shumpei's project for example we
+% This is how the code works.
+% 1. We load two ROIs in the brain, for Shumpei's project for example we
 %    will load the right-LGN and the right-Visual cortex
 % 2. We create union ROI by combining these two ROIs. The union ROI is used
-%    as seeding fro the fibers. mrtrix will initiate and terminate fibers only
+%    as seeding for the fibers. mrtrix will initiate and terminate fibers only
 %    within the volume defined by the Union ROI.
-% 3. We create a white matter mask. THis mask is generally a large portion
+% 3. We create a white matter mask. This mask is generally a large portion
 %    of the white matter. A portion that contains both union ROIs. For example
 %    the right hemisphere.
 % 4. We use mrtrix to track between the right-LGN and righ-visual cortex.
-% mrtrix will initiate fibers by seeding within the UNION ROI and it will
-% only keep fibers that have paths within the white matter masks.
+%    mrtrix will initiate fibers by seeding within the UNION ROI and it will 
+%    only keep fibers that have paths within the white matter masks.
 %
-% The final result of this script is to generate lot's of canddte fibers 
-% that specifically end and start from the ROI of interest. Thisis an 
-% approach similar to Contrack. 
+% The final result of this script is to generate lot's of candidate fibers 
+% that specifically end and start from the ROI of interest. This is a similar 
+% approach to Contrack. 
 %
 % INPUTS: none
-% OUTPUTS: the finela name of the ROI created at each iteration
+% OUTPUTS: the final name of the ROI created at each iteration
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/storg/matproc/';
+baseDir = '/media/lcne/matproc/';
 
-subjects = {'els006','els009','els012','els034','els040','els058','els059', ...
+subjects = {'els090'};
+
+%{
+'els006','els009','els012','els034','els040','els058','els059', ...
             'els060','els061','els062','els075','els086','els089','els090', ...
-            'els092','els095','els097','els099','els100'};
+            'els092','els095','els097','els099','els100'
+'els103','els106','els107','els111','els112','els113','els114', ...
+            'els115','els116','els117','els118','els121','els122','els124', ...
+            'els125','els127','els130','els132','els134','els136','els137', ...
+            'els139','els140','els145','els147','els148','els149','els151', ...
+            'els154','els155','els156','els157','els162','els163','els164', ...
+            'els165','els166','els171'};
+%}
         
 for isubj = 1:length(subjects)
 
@@ -41,14 +51,19 @@ for isubj = 1:length(subjects)
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti60trilin/fibers/mrtrix/');
     
     % We want to track the subcortical pathway
-    fromRois = {'lh_nacc_aseg_fd'};
-    toRois   = {'lh_antshortins_fd'};
-    
+    fromRois = {'rh_hippo_aseg'};
+    toRois   = {'rmpfc05'};
+    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_fs_fd');
+
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
     lmax    = [8]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
-    maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
+    maxNFibers2try = 5000000; %1000000; % this is the max number of fibers to try before giving up
+    cutoff = 0.075; %FA cutoff along path
+    initcutoff = 0.05; %FA cutoff at seed
+    curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
+    stepsize = 0.2; %voxel-voxel step distance
     wmMask  = [];
     
     % Make an (include) white matter mask ROI. This mask is the smallest
@@ -56,7 +71,6 @@ for isubj = 1:length(subjects)
     %
     % We use a nifti ROi to select the portion of the White matter to use for
     % seeding
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/lh_wmmask_fs_fd_clip_insnacc');
     [~, wmMaskName] = dtiRoiNiftiFromMat(wmMaskName,refImg,wmMaskName,1);
     
     % Then transform the niftis into .mif
@@ -131,9 +145,9 @@ for isubj = 1:length(subjects)
         cd(fibersFolder);
         
         % We genenrate and save the fibers in the current folder.
-        [fibersPDB{nRoi}, status, results] = s_finra2_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
+        [fibersPDB{nRoi}, status, results] = s_els_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
             seedRoiMifName, wmMaskMifName, trackingAlgorithm{1}, ...
-            maxNFibers2try2find, maxNFibers2try);
+            maxNFibers2try2find, maxNFibers2try, cutoff, initcutoff, curvature, stepsize);
         
         %fgWrite(fibersPDB,['fibername'],'pwd')
     end

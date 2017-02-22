@@ -4,7 +4,7 @@ function s_els_dtiInit_across_subjects
 % one of them
 %
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 % dti raw faulty? {'els006','els009','els012',}
 % no dti 'els060'
 % dti incomplete 'els029'
@@ -16,10 +16,19 @@ datapath = '/media/storg/matproc';
 %            'els072','els073','els074','els076','els077','els079','els081', ...
 %            'els083','els085','els087','els088','els093'};
 %        els006',
-subjects = {'els009','els012','els034','els040','els058','els059', ...
-            'els060','els061','els062','els075','els086','els089','els090', ...
-            'els092','els095','els097','els099','els100'};
+%'els009','els012','els034','els040','els058','els059', ...
+%            'els060','els061','els062','els075','els086','els089','els090', ...
+%            'els092','els095','els097','els099','els100'};
 
+subjects = {'els089'};
+%{
+'els103','els106','els107','els111','els112','els113','els114', ...
+            'els115','els116','els117','els118','els121','els122','els124', ...
+            'els125','els127','els130','els132','els134','els136','els137', ...
+            'els139','els140','els145','els147','els148','els149','els151', ...
+            'els154','els155','els156','els157','els162','els163','els164', ...
+            'els165','els166','els171'};
+%}
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
@@ -34,8 +43,8 @@ for isubj = 1:length(subjects)
     t1File = fullfile(datapath,subjects{isubj},t1Path.name);
 
     dwiParams = dtiInitParams;
+    dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
-    dwiParams.phaseEncodeDir = 1;
-    
+    dwiParams.phaseEncodeDir = 2;
     dtiInit(dwiFile, t1File, dwiParams);
 end

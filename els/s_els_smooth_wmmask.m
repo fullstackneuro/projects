@@ -6,12 +6,22 @@ function s_els_smooth_wmmask
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {'els006','els009','els012','els034','els040','els058','els059', ...
+subjects = {'els090'};
+
+%{
+'els006','els009','els012','els034','els040','els058','els059', ...
             'els060','els061','els062','els075','els086','els089','els090', ...
-            'els092','els095','els097','els099','els100'};
-        
+            'els092','els095','els097','els099','els100'
+'els103','els106','els107','els111','els112','els113','els114', ...
+            'els115','els116','els117','els118','els121','els122','els124', ...
+            'els125','els127','els130','els132','els134','els136','els137', ...
+            'els139','els140','els145','els147','els148','els149','els151', ...
+            'els154','els155','els156','els157','els162','els163','els164', ...
+            'els165','els166','els171'};
+%}
+            
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
     roi = dir(fullfile(roiPath,'rh_wmmask_fs.mat'));

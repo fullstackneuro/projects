@@ -19,7 +19,9 @@ for isubj = 1:length(subjects)
     t1File = fullfile(datapath, subjects{isubj}, t1Path.name);
 
     dwiParams = dtiInitParams;
-    %dwiParams.clobber = true;
+    dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
+    %dwiParams.phaseEncodeDir = 2;
+    dwiParams.rotateBvecsWithCanXform = true;
     dtiInit(dwiFile, t1File, dwiParams);
 end

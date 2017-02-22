@@ -3,9 +3,9 @@ function s_els_dtiInit
 % This function loads a series of subjects and performs dtiInit for each
 %
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {'els098'};
+subjects = {'els090'};
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
@@ -19,7 +19,7 @@ for isubj = 1:length(subjects)
     t1File = fullfile(datapath, subjects{isubj}, t1Path.name);
 
     dwiParams = dtiInitParams;
-    %dwiParams.clobber = true;
+    dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
     dtiInit(dwiFile, t1File, dwiParams);
 end

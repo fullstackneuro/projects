@@ -26,15 +26,14 @@ function fibersPDB = s_alc_mrtrix_track_between_rois
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/storg/matproc/';
+baseDir = '/media/lcne/matproc/';
 
-subjects = {'alc283','alc286'};      
-        %{
-'alc187','alc219','alc220','alc245', ...
-            'alc257','alc262','alc269','alc274', ...
-            'alc275','alc276','alc277','alc278', ...
-            'alc280','alc281','alc282','alc284'
-%}
+subjects = {'alc219','alc220','alc245','alc257','alc262','alc269', ...
+            'alc274','alc275','alc276','alc277','alc278','alc280','alc281', ...
+            'alc282','alc284','alc283','alc286'};
+            %'alc187''alc289','alc290','alc291', ...
+            %'alc293','alc294'};
+        
 for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
@@ -44,17 +43,17 @@ for isubj = 1:length(subjects)
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti84trilin/fibers/mrtrix/');
     
     % We want to track the subcortical pathway
-    fromRois = {'lh_nacc_aseg_fd'};
-    toRois   = {'lh_antshortins_fd'};
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/lh_wmmask_fs_fd');
+    fromRois = {'rh_nacc_aseg_fd'};
+    toRois   = {'rh_antshortins_fd'};
+    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_fs_fd');
 
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
     lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
     maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
-    cutoff = 0.1; %FA cutoff along path
-    initcutoff = 0.1; %FA cutoff at seed
+    cutoff = 0.075; %FA cutoff along path
+    initcutoff = 0.05; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
     wmMask  = [];
@@ -138,7 +137,7 @@ for isubj = 1:length(subjects)
         cd(fibersFolder);
         
         % We generate and save the fibers in the current folder.
-        [fibersPDB{nRoi}, status, results] = s_alc_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
+        [fibersPDB{nRoi}, status, results] = s_gen_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
             seedRoiMifName, wmMaskMifName, trackingAlgorithm{1}, ...
             maxNFibers2try2find, maxNFibers2try, cutoff, initcutoff, curvature, stepsize);
         

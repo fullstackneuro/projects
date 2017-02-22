@@ -1,7 +1,7 @@
 function s_plasticity_1_dtiInit
 %
 % This function loads a series of subjects and performs dtiInit for each
-%
+% Align all 4 DWI acquisitions to first T1
 
 datapath = '/media/storg/matproc';
 
@@ -32,7 +32,8 @@ for isubj = 1:length(subjects)
     t1File = fullfile(datapath, subjects{isubj}, t1Path.name);
 
     dwiParams = dtiInitParams;
-    %dwiParams.clobber = true;
+    dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
+    dwiParams.phaseEncodeDir = 2;
     dtiInit(dwiFile, t1File, dwiParams);
 end

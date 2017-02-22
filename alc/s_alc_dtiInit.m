@@ -3,13 +3,16 @@ function s_alc_dtiInit
 % This function loads a series of subjects and performs dtiInit for each
 %
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {'alc187','alc219','alc220','alc245', ...
+subjects = {'alc219','alc220','alc245', ...
             'alc257','alc262','alc269','alc274', ...
             'alc275','alc276','alc277','alc278', ...
-            'alc280','alc281','alc282','alc284'};
-        
+            'alc280','alc281','alc282','alc283', ...
+            'alc284','alc286','alc289','alc290', ...
+            'alc291','alc293','alc294'};       
+%where is raw alc187?
+
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
     %dwiPath = dir(fullfile(datapath,subjects{iSbj},'*DTI*'));
@@ -22,7 +25,8 @@ for isubj = 1:length(subjects)
     t1File = fullfile(datapath, subjects{isubj}, t1Path.name);
 
     dwiParams = dtiInitParams;
-    %dwiParams.clobber = true;
+    dwiParams.clobber = true;
     dwiParams.dwOutMm = [2, 2, 2];
+    dwiParams.phaseEncodeDir = 2;
     dtiInit(dwiFile, t1File, dwiParams);
 end

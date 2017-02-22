@@ -85,12 +85,13 @@ if notDefined('t1FileName') || ~exist(t1FileName,'file')
 end
 fprintf('t1FileName = %s;\n', t1FileName);
 
+%{
 if notDefined('t1MaskFileName') || ~exist(t1MaskFileName,'file')
     t1MaskFileName = mrvSelectFile('r',{'*.nii.gz';'*.*'},'Select T1 Mask nifti file');
     if isempty(t1MaskFileName); disp('rat_dtiInit cancelled by user.'); return; end
 end
 fprintf('t1MaskFileName = %s;\n', t1MaskFileName);
-
+%}
 
 %% III. Reorient voxel order to a standard, unflipped, axial order
 
@@ -183,7 +184,8 @@ end
 % reference image (t1). If the alignment is computed doResamp will be true.
 [doAlign, doResamp] = dtiInitAlign(dwParams,dwDir,doResamp);
 
-if doAlign, rat_dtiRawAlignToT1(dwDir.mnB0Name, t1FileName, dwDir.acpcFile, t1MaskFileName); end
+if doAlign, rat_dtiRawAlignToT1(dwDir.mnB0Name, t1FileName, dwDir.acpcFile); end
+%if doAlign, rat_dtiRawAlignToT1(dwDir.mnB0Name, t1FileName, dwDir.acpcFile, t1MaskFileName); end
 
 
 %% XI. Resample the DWIs / ACPC alignment

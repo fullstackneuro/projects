@@ -7,11 +7,28 @@ function s_els_fe_make_wmmask_fsseg
 
 % Get the base directory for the data
 %baseDir    = '/media/storg/fsproc/acpc';
-matProcDir = '/media/storg/matproc';
+matProcDir = '/media/lcne/matproc';
 
-subjects = {'els006','els009','els012','els034','els040','els058','els059', ...
+%subjects t2
+subjects =  {'els049-T2','els050-T2', ...
+             'els054-T2','els056-T2','els061-T2','els064-T2','els065-T2','els067-T2','els068-T2', ...
+             'els069-T2','els070-T2','els081-T2','els087-T2','els089x-T2','els092-T2','els100-T2'};
+
+%{
+ 'els006-T2','els012-T2','els013-T2','els014-T2','els016-T2','els017-T2','els025-T2',...
+             'els026-T2','els032x-T2','els042-T2','els047-T2','els048-T2','els006-T2','els012-T2','els013-T2','els014-T2','els016-T2','els017-T2','els025-T2',...
+             'els026-T2','els032x-T2','els042-T2','els047-T2','els048-T2',            
+             
+'els006','els009','els012','els034','els040','els058','els059', ...
             'els060','els061','els062','els075','els086','els089','els090', ...
-            'els092','els095','els097','els099','els100'};
+            'els092','els095','els097','els099','els100'
+'els103','els106','els107','els111','els112','els113','els114', ...
+            'els115','els116','els117','els118','els121','els122','els124', ...
+            'els125','els127','els130','els132','els134','els136','els137', ...
+            'els139','els140','els145','els147','els148','els149','els151', ...
+            'els154','els155','els156','els157','els162','els163','els164', ...
+            'els165','els166','els171'};
+%}
 
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
@@ -26,10 +43,10 @@ for isubj = 1:length(subjects)
         
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
-    %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 2 10 11 12 13 26 28 11118 11148 11164 11124];
-    %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
-    %rh 16 41 49 50 51 52 58 60 12118 12148 12164 12124
+    invals = [16 2 10 11 12 13 17 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124];
+    %lh 16 2 10 11 12 13 17 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124
+    %rh 16 41 49 50 51 52 53 58 60 12113 12114 12117 12118 12148 12149 12163 12164 12124
+    
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;

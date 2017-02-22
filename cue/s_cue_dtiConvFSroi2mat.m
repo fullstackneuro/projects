@@ -4,14 +4,19 @@ function s_cue_dtiConvFSroi2mat
 % dtiConvertFreeSurferRoiToMat for each one of them
 %
 
-matpath  = '/media/storg/matproc';
+matpath  = '/media/lcne/matproc';
+%matpath = '/media/storg/matproc';
 
-subjects = {'as160129','bp160213','cs160214','kl160122', ...
-            'nb160221','rp160205','ss160205','wh160130'};
+subjects = {'zl150930'};
+
 %{
-'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
-            'jv151030','ps151001','si151120','sr151031','tf151127','vm151031', ...
-            'wr151127','zl150930'
+'am160914','kn160918','ld160918','li160927'
+'ac160415','jh160702','jr160507','mp160511','ps160508'
+'ab071412','al151016','bb160402','bk032113','bp160213','cs160214','dc050213', ...
+            'ds080712','en062813','gr051513','hm062513','jc160320','jc160321','jg151121', ...
+            'jl071912','jt062413','jv151030','jw072512','jw160316','lc052213', ...
+            'mk021913','ml061013','np072412','pk160319','ps151001','pw060713','rb160407', ...
+            'rf160313','sp061313','wb071812','zl150930'
 %}
 
 for isubj = 1:length(subjects)
@@ -22,6 +27,7 @@ for isubj = 1:length(subjects)
     asegPath  = fullfile(matProcPath, asegFname);
 
     %create mat rois based on fs seg lookup table
+    
     dtiConvertFreeSurferRoiToMat(asegPath, 11113, 'lh_frontorb_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 12113, 'rh_frontorb_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 11163, 'lh_latorb_a2009s');
@@ -63,5 +69,8 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 16, 'brainstem_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 28, 'lh_ventraldc_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 60, 'rh_ventraldc_aseg');
+    
+    dtiConvertFreeSurferRoiToMat(asegPath, 11116, 'lh_supfront_a2009s');
+    dtiConvertFreeSurferRoiToMat(asegPath, 12116, 'rh_supfront_a2009s');
     
 end

@@ -6,37 +6,43 @@ function s_alc_make_and_smooth_roi_mat
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {'alc283','alc286'};
-%{
-'alc187','alc219','alc220','alc245', ...
-            'alc257','alc262','alc269','alc274', ...
-            'alc275','alc276','alc277','alc278', ...
-            'alc280','alc281','alc282','alc284'
-%}
+subjects = {'alc289','alc290','alc291','alc293','alc294'};
 
+rois = {'rh_frontorb_a2009s', ...
+        'rh_frontinfang_a2009s', ...
+        'rh_antins_a2009s', ...
+        'rh_shortins_a2009s', ...
+        'rh_nacc_aseg', ...
+        'rh_latorb_a2009s', ...
+        'rh_wmmask_fs', ...
+        'lh_frontorb_a2009s', ...
+        'lh_frontinfang_a2009s', ...
+        'lh_antins_a2009s', ...
+        'lh_shortins_a2009s', ...
+        'lh_nacc_aseg', ...
+        'lh_latorb_a2009s', ...
+        'lh_wmmask_fs'};
+        
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
-    roi = dir(fullfile(roiPath,'rh_nacc_aseg.mat'));
-    %lh_antshortins, rh_antshortins
-    %lh_nacc_aseg, rh_nacc_aseg
-    %lh_wmmask_fs, rh_wmmask_fs
-    oldRoi = roi.name;
-    oldRoiPath = fullfile(roiPath, oldRoi);
-    outRoi = [roiPath '/rh_nacc_aseg_fd.mat'];
-    smoothKernel = 0; % size of the 3D smoothing Kernel in mm
-    %operations   = ['fillholes', 'dilate', 'removesat']; 
-    operations   = [1, 1, 0]; 
+    for iroi = 1:length(rois)
+        roi = fullfile(roiPath, [rois{iroi} '.mat']);
+        outRoi = fullfile(roiPath, [rois{iroi} '_fd.mat']);
+        smoothKernel = 0; % size of the 3D smoothing Kernel in mm
+        %operations   = ['fillholes', 'dilate', 'removesat']; 
+        operations   = [1, 1, 0]; 
 
-    % fillholes = fill any hole in the ROI. Pass '' to not apply this
-    %             operation
-    % dilate     = expand the ROI in 3D. Pass '' to not apply this
-    %             operation
-    % removesat  = remove any voxel disconnected from the rest of the voxels. 
-    %              Pass '' to not apply this operation
+        % fillholes = fill any hole in the ROI. Pass '' to not apply this
+        %             operation
+        % dilate     = expand the ROI in 3D. Pass '' to not apply this
+        %             operation
+        % removesat  = remove any voxel disconnected from the rest of the voxels. 
+        %              Pass '' to not apply this operation
     
-    oldRoiLoad = dtiReadRoi(oldRoiPath);
-    newRoi = dtiRoiClean(oldRoiLoad, smoothKernel, operations);
-    dtiWriteRoi(newRoi, outRoi);
+        oldRoiLoad = dtiReadRoi(roi);
+        newRoi = dtiRoiClean(oldRoiLoad, smoothKernel, operations);
+        dtiWriteRoi(newRoi, outRoi);
+    end
 end

@@ -16,18 +16,20 @@
 %% Set directory structure
 %% I. Directory and Subject Informatmation
 dirs    = 'dti96trilin';
-logDir  = '/media/storg/matproc/stats';
-baseDir = {'/media/storg/matproc'};
+logDir  = '/media/lcne/matproc/stats';
+baseDir = {'/media/lcne/matproc'};
 
-subjects = {'as160129','bp160213','cs160214','kl160122','rp160205','ss160205','wh160130'};
+subjects = {'ac160415','jr160507','ps160508','yl160507'};
 %{
+'as160129','bp160213','cs160214','kl160122','rp160205','ss160205','wh160130'
 'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
             'jv151030','ps151001','si151120','sr151031','tf151127','vm151031', ...
             'wr151127','zl150930'
 %}
                 
 % Set fiber groups
-fiberName = {'clean_rh_antshortins_nacc.mat', 'clean_rfrontorb_shortins.mat'};
+fiberName = {'clean_rh_antshortins_nacc.mat','clean_rh_frontorb_shortins.mat', ...
+             'clean_lh_antshortins_nacc.mat','clean_lh_frontorb_shortins.mat'};
 
 %% Set up the text file that will store the fiber vals.
 dateAndTime     = getDateAndTime;

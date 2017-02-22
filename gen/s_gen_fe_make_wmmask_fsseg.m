@@ -1,4 +1,4 @@
-function s_fe_make_wmmask_fsseg
+function s_gen_fe_make_wmmask_fsseg
 %
 % This script makes the white-matter mask from freesurfer segmentation
 % used to track the connectomes in Pestilli et al., LIFE paper.
@@ -7,16 +7,18 @@ function s_fe_make_wmmask_fsseg
 
 % Get the base directory for the data
 %baseDir    = '/media/storg/fsproc/acpc';
-matProcDir = '/media/storg/matproc';
+matProcDir = '/media/lcne/matproc';
 
-subjects = {'yw083014_7mm_1'};
-
+subjects = {'aa151010','ag151024','al151016','dw151003','ie151020','ja151218','jg151121', ...
+            'jv151030','ps151001','si151120','sr151031','tf151127','tm161017','vm151031', ...
+            'wr151127','zl150930'};
+        
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
     %fsMriFolder = fullfile(subjectFolder, 'mri');
     matRoiFolder = fullfile(matProcDir,subjects{isubj},'ROIs');
      
-    wmMaskFile = fullfile(matRoiFolder,'rh_wmmask_fs.nii.gz'); 
+    wmMaskFile = fullfile(matRoiFolder,'lh_wmmask_fs.nii.gz'); 
     [~,wmMaskFileName,~] = fileparts(wmMaskFile);
     wmMaskFileName = wmMaskFileName(1:end-4); %strip .nii after .gz
     
@@ -25,9 +27,9 @@ for isubj = 1:length(subjects)
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
     %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 41 49 50 51 52 58 60 12118 12148 12164 12124];
-    %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
-    %rh 16 41 49 50 51 52 58 60 12118 12148 12164 12124
+    invals = [16 2 10 11 12 13 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124];
+    %lh 16 2 10 11 12 13 26 28 11113 11114 11117 11118 11148 11149 11163 11164 11124
+    %rh 16 41 49 50 51 52 58 60 12113 12114 12117 12118 12148 12149 12163 12164 12124
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;
