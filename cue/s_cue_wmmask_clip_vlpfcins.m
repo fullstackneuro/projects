@@ -5,9 +5,8 @@ function s_cue_wmmask_clip_vlpfcins
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
-datapath = '/media/lcne/matproc/';
-%datapath = '/media/storg/matproc/';
-subjects = {'am160914','kn160918','ld160918','li160927'};
+datapath = '/media/storg/matproc/';
+subjects = {'lf052813','sn061213','tw062113'};
 
 %{
 'ac160415','jh160702','jr160507','mp160511','ps160508'

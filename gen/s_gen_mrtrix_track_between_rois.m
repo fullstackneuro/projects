@@ -26,14 +26,14 @@ function fibersPDB = s_gen_mrtrix_track_between_rois
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/storg/matproc/';
+baseDir = '/media/lcne/matproc/';
 
-subjects = {'lc052213'};      
+subjects = {'aw160919'};      
         
 for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
-    subjectRefImg = [subjects{isubj} '_t1_acpc.nii.gz'];
+    subjectRefImg = [subjects{isubj} '_anat_acpc_lpi.nii.gz'];
     dtFile = fullfile(baseDir, subjectDir, '/dti96trilin/dt6.mat');
     refImg = fullfile(baseDir, subjectDir, subjectRefImg);
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix/');
@@ -41,7 +41,7 @@ for isubj = 1:length(subjects)
     % We want to track the subcortical pathway
     fromRois = {'rh_nacc_aseg_fd'};
     toRois   = {'rh_antshortins_fd'};
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_fs_fd');
+    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rect_00_00_00_fd');
 
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};

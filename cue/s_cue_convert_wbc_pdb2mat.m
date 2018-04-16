@@ -2,13 +2,10 @@ function s_cue_convert_wbc_pdb2mat
 
 %script to convert wbc.pdb to wbc.mat
 %
-%
 
 baseDir = '/media/lcne/matproc/';
-%baseDir = '/media/storg/matproc/';
-%subjects = {'ac160415','cm160510','ja160416','jr160507','mp160511','ps160508','rt160420','yl160507'};
-%subjects = {'jh160702'};
-subjects = {'am160914','kn160918','ld160918','li160927'};
+
+subjects = {'hw161104','ph161104'};
 
 %{
 subjects = {'al151016','bb160402','bp160213','cs160214', ...

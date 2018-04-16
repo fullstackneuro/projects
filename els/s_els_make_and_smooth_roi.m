@@ -8,9 +8,8 @@ function s_els_make_and_smooth_roi
 
 datapath = '/media/lcne/matproc';
 
-subjects = {'els049-T2'};
+subjects = {'els175','els184','els187','els196','els201','els214'};
 
-%subjects t2
 %{
 subjects =  {'els006-T2','els012-T2','els013-T2','els014-T2','els016-T2','els017-T2','els025-T2',...
              'els026-T2','els032x-T2','els042-T2','els047-T2','els048-T2','els049-T2','els050-T2', ...

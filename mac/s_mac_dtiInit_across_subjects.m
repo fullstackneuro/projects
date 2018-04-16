@@ -4,15 +4,15 @@ function s_mac_dtiInit_across_subjects
 % one of them
 %
 
-datapath = '/media/storg/matproc';
-subjects = {'mac03218_1','mac03218_1'};
+datapath = '/media/lcne/matproc';
+subjects = {'mac13106'};
 
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals
     %dwiPath = dir(fullfile(datapath,subjects{iSbj},'*DTI*'));
     dwiPath = fullfile(datapath,subjects{isubj},'raw');
-    dwiFile = dir(fullfile(dwiPath,'*.nii.gz'));
+    dwiFile = dir(fullfile(dwiPath,'*.nii'));
     %dwiFile = fullfile(datapath,subjects{iSbj},dwiFile.name);
     %dwiBvec = [dwiFile(1:end-6),'bvec'];
     %dwiBval = [dwiFile(1:end-6),'bval'];

@@ -6,10 +6,11 @@ function s_cue_wmmask_clip_insnacc
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
 datapath = '/media/lcne/matproc/';
-%datapath = '/media/storg/matproc/';
-subjects = {'am160914','kn160918','ld160918','li160927'};
+
+subjects = {'hw161104','ph161104'};
 
 %{
+'am160914','kn160918','ld160918','li160927'
 'ac160415','jh160702','jr160507','mp160511','ps160508'
 subjects = {'al151016','bb160402','bp160213','cs160214', ...
             'jc160320','jc160321','jg151121', ...
@@ -22,11 +23,11 @@ subjects = {'al151016','bb160402','bp160213','cs160214', ...
 for isubj = 1:length(subjects)
     refImg = fullfile(datapath, subjects{isubj}, [subjects{isubj} '_t1_acpc.nii.gz']);
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
-    roi = dir(fullfile(roiPath,'rh_wmmask_fs_fd.mat'));
+    roi = dir(fullfile(roiPath,'lh_wmmask_fs_fd.mat'));
     oldRoi = roi.name;
     oldRoiPath = fullfile(roiPath, oldRoi);
-    outRoiMat = [roiPath '/rh_wmmask_clip_ainsnacc.mat'];
-    %outRoiMat = [roiPath '/lh_wmmask_clip_ainsnacc.mat'];
+    %outRoiMat = [roiPath '/rh_wmmask_clip_ainsnacc.mat'];
+    outRoiMat = [roiPath '/lh_wmmask_clip_ainsnacc.mat'];
     oldRoiLoad = dtiReadRoi(oldRoiPath);
     
     %clip in two steps

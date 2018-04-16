@@ -26,9 +26,8 @@ function fibersPDB = s_cue_mrtrix_track_wholebrainconnectome
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/lcne/matproc/';
-%subjects = {'ac160415','cm160510','ja160416','jr160507','mp160511','ps160508','rt160420','yl160507'};
-subjects = {'am160914','kn160918','ld160918','li160927'};
+baseDir = '/media/storg/matproc/';
+subjects = {'lf052813','sn061213','tw062113'};
 
 for isubj = 1:length(subjects)
     

@@ -4,19 +4,10 @@
 %
 %MAKE SURE TO EDIT HEMISPHERE
         
-%baseDir = '/media/lcne/matproc/';
-%subjects = {'li160927','ac160415','kn160918','jh160702','jr160507','mp160511'};
-
+%'lf052813','sn061213','tw062113'
 baseDir = '/media/storg/matproc/';
-subjects = {'ab071412','bk032113','dc050213','ds080712','en062813','gr051513','hm062513', ...
-            'jl071912','jw072512','lc052213','mk021913','ml061013','np072412','pw060713','sp061313'};
-%{
-'al151016','bb160402','bp160213','cs160214', ...
-            'jc160320','jc160321','jg151121', ...
-            'jv151030','jw160316', ...
-            'pk160319','rb160407', ...
-            'rf160313','zl150930'};
-%}        
+subjects = {'tw062113'};
+  
 for isubj = 1:length(subjects)
     %% (0) Set up paths and filenames
     % Base subject folder
@@ -24,7 +15,7 @@ for isubj = 1:length(subjects)
     subjectFolder = fullfile(baseDir, subjectDir);
     
     % make life folder if doesn't exist
-    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/life/mpfcnacc/rh_nowbc');
+    lifeFolder    = fullfile(subjectFolder, '/dti96trilin/fibers/life/mpfcnacc/lh_nowbc');
         if ~exist(lifeFolder,'dir'); mkdir(lifeFolder); end 
         
     % T1 high resolution anatomy
@@ -32,15 +23,15 @@ for isubj = 1:length(subjects)
     sub_t1w_acpc  = fullfile(subjectFolder, subjectRefImg);
     
     % Fibers and tracts
-    %fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/conTrack/mpfcnacc');
-    fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/conTrack/frontostriatal');
+    fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/conTrack/mpfcnacc');
+    %fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/conTrack/frontostriatal');
     wbcFolder     = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix');
     sub_wbc       = fullfile(wbcFolder, 'lmax10_wbc.mat');
-    sub_roi2roi_track = fullfile(fibersFolder, 'clean_rh_mpfc_nacc.mat');
+    sub_roi2roi_track = fullfile(fibersFolder, 'clean_lh_mpfc_nacc.mat');
        
     % ROIs and WM masks
     roiFolder        = fullfile(baseDir, subjectDir, '/ROIs');
-    sub_wmmask_track = fullfile(roiFolder, 'rh_wmmask_clip_mpfcnacc.nii.gz');
+    sub_wmmask_track = fullfile(roiFolder, 'lh_wmmask_clip_mpfcnacc.nii.gz');
     %sub_roi1 = fullfile(roiFolder, 'rh_frontorb_a2009s_fd.nii.gz');
     %sub_roi2 = fullfile(roiFolder, 'rh_shortins_a2009s_fd.nii.gz');
     
@@ -112,7 +103,7 @@ for isubj = 1:length(subjects)
     end
     
     % saves strength of evidence for subject
-    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_rh_se_nowbc.mat']);
+    subjectSeName = fullfile(lifeFolder,[subjects{isubj} '_lh_se_nowbc.mat']);
     save(subjectSeName, 'se');
     
     % close figures for subject

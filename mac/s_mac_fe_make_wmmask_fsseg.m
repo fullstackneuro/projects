@@ -10,15 +10,15 @@ function s_mac_fe_make_wmmask_fsseg
 matProcDir = '/media/storg/matproc';
 
 subjects = {'mac03218_1','mac03218_2','mac12826_1','mac12826_2', ...
-            'mac18000_1','mac18000_2'};
-%,'mac18622_1','mac18622_2'
+            'mac18000_1','mac18000_2','mac18622_1'};
+%'mac18622_2'
 
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
     %fsMriFolder = fullfile(subjectFolder, 'mri');
     matRoiFolder = fullfile(matProcDir,subjects{isubj},'ROIs');
      
-    wmMaskFile = fullfile(matRoiFolder,'lh_wmmask_fs.nii.gz'); 
+    wmMaskFile = fullfile(matRoiFolder,'rh_wmmask_fs.nii.gz'); 
     [~,wmMaskFileName,~] = fileparts(wmMaskFile);
     wmMaskFileName = wmMaskFileName(1:end-4); %strip .nii after .gz
     
@@ -26,10 +26,10 @@ for isubj = 1:length(subjects)
         
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
-    %OLD invals  = [2 41 16 17 28 60 51 53 12 52 13 18 54 50 11 251 252 253 254 255 10 49 46 7];
-    invals = [16 2 10 11 12 13 26 28 11118 11148 11164 11124];
-    %lh 16 2 10 11 12 13 26 28 11118 11148 11164 11124
-    %rh 16 41 49 50 51 52 58 60 12118 12148 12164 12124
+    invals = [16 41 49 50 51 52 58 60 12106 12107 12108 12109 12110 12113 12115 12116 12117 12118 12124 12139 12148 12149 11154 12155 12163 12164 12165];
+    %lh 16 2 10 11 12 13 26 28 11106 11107 11108 11109 11110 11113 11115 11116 11117 11118 11124 11139 11148 11149 11154 11155 11163 11164 11165
+    %rh 16 41 49 50 51 52 58 60 12106 12107 12108 12109 12110 12113 12115 12116 12117 12118 12124 12139 12148 12149 11154 12155 12163 12164 12165
+    
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;

@@ -1,4 +1,4 @@
-function s_make_and_smooth_roi_mat
+function s_gen_make_and_smooth_roi_mat
 %
 % This script loads a NIFTI ROI, tranforms it into a mat ROI and 
 % Applies some operations to it, such as smoothing, dilation and 
@@ -6,16 +6,16 @@ function s_make_and_smooth_roi_mat
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
-datapath = '/media/storg/matproc';
+datapath = '/media/lcne/matproc';
 
-subjects = {'yw083014_7mm_1'};
+subjects = {'aw160919'};
 
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
-    roi = dir(fullfile(roiPath,'rh_nacc_aseg.mat'));
+    roi = dir(fullfile(roiPath,'rect_00_00_00.mat'));
     oldRoi = roi.name;
     oldRoiPath = fullfile(roiPath, oldRoi);
-    outRoi = [roiPath '/rh_nacc_aseg_fd.mat'];
+    outRoi = [roiPath '/rect_00_00_00_fd.mat'];
     smoothKernel = 0; % size of the 3D smoothing Kernel in mm
     %operations   = ['fillholes', 'dilate', 'removesat']; 
     operations   = [1, 1, 0]; 
@@ -30,4 +30,8 @@ for isubj = 1:length(subjects)
     oldRoiLoad = dtiReadRoi(oldRoiPath);
     newRoi = dtiRoiClean(oldRoiLoad, smoothKernel, operations);
     dtiWriteRoi(newRoi, outRoi);
+    
+    refImg = [datapath '/' subjects{isubj} '/aw160919_anat_acpc_lpi.nii.gz'];
+    niiOutRoi = [roiPath '/rect_00_00_00_fd'];
+    dtiRoiNiftiFromMat(outRoi,refImg,niiOutRoi,1);
 end

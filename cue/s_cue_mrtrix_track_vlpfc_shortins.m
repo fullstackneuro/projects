@@ -26,20 +26,10 @@ function fibersPDB = s_cue_mrtrix_track_vlpfc_shortins
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/lcne/matproc/';
-
-subjects = {'am160914','kn160918','ld160918','li160927'};
-
-%{
-'ac160415','jh160702','jr160507','mp160511','ps160508'
-'ab071412','al151016','bb160402','bk032113','bp160213','cs160214','dc050213', ...
-            'ds080712','en062813','gr051513','hm062513','jc160320','jc160321','jg151121', ...
-            'jl071912','jt062413','jv151030','jw072512','jw160316','lc052213', ...
-            'mk021913','ml061013','np072412','pk160319','ps151001','pw060713','rb160407', ...
-            'rf160313','sp061313','wb071812','zl150930'
-%}
-
-hemis = {'lh','rh'};
+baseDir = '/media/lcne/matproc';
+subjects = {'ts170927'};
+            %'ds170915',
+hemis = {'lh'};
             
 for isubj = 1:length(subjects)
 
@@ -60,8 +50,8 @@ for isubj = 1:length(subjects)
     lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
     maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
-    cutoff = 0.1; %FA cutoff along path
-    initcutoff = 0.1; %FA cutoff at seed
+    cutoff = 0.05; %FA cutoff along path
+    initcutoff = 0.05; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
     wmMask = [];

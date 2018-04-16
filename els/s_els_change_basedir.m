@@ -18,6 +18,13 @@ subjects =  {'els006-T2','els012-T2','els013-T2','els014-T2','els016-T2','els017
              'els069-T2','els070-T2','els081-T2','els087-T2','els089x-T2','els092-T2','els100-T2'};
 
 
+subjects = {'els173','els174','els175','els179','els180','els183','els184', ...
+            'els185','els186','els187','els188','els189','els191', ...
+            'els192x','els193','els194x','els196','els197x','els201', ...
+            'els202','els203','els208','els208x','els210', ...
+            'els213','els214','els215'};
+   
+         
 for isubj = 1:length(subjects)
 
     dtFile = fullfile(baseDir, subjects{isubj}, '/dti60trilin/dt6.mat');

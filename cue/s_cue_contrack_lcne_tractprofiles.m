@@ -19,7 +19,7 @@ dirs    = 'dti96trilin';
 logDir  = '/media/lcne/matproc/stats';
 baseDir = {'/media/lcne/matproc'};
      
-subjects = {'ac160415','am160914','jh160702','jr160507','kn160918','ld160918','li160927','mp160511','ps160508'};
+subjects = {'hw161104','ph161104'};
 
 %{
 % lcne old = 

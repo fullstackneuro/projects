@@ -19,9 +19,7 @@ dirs    = 'dti96trilin';
 logDir  = '/media/storg/matproc/stats';
 baseDir = {'/media/storg/matproc'};
      
-subjects = {'ab071412','bk032113','dc050213','ds080712','en062813','gr051513','hm062513', ...
-            'jl071912','jt062413','jw072512','lc052213','mk021913','ml061013','np072412', ...
-            'pw060713','sp061313','wb071812'};
+subjects = {'lf052813','sn061213','tw062113'};
                 
 % Set fiber groups
 fiberName = {'clean_rh_mpfc_nacc.mat', ...

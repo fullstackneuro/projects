@@ -8,7 +8,7 @@ function s_els_smooth_wmmask
 
 datapath = '/media/lcne/matproc';
 
-subjects = {'els090'};
+subjects = {'els016','els026','els075'};
 
 %{
 'els006','els009','els012','els034','els040','els058','els059', ...
@@ -24,13 +24,13 @@ subjects = {'els090'};
             
 for isubj = 1:length(subjects)
     roiPath = fullfile(datapath, subjects{isubj}, 'ROIs');
-    roi = dir(fullfile(roiPath,'rh_wmmask_fs.mat'));
+    roi = dir(fullfile(roiPath,'lh_wmmask_fs.mat'));
     oldRoi = roi.name;
     oldRoiPath = fullfile(roiPath, oldRoi);
-    outRoi = [roiPath '/rh_wmmask_fs_fd.mat'];
+    outRoi = [roiPath '/lh_wmmask_fs_cing_fd.mat'];
     smoothKernel = 0; % size of the 3D smoothing Kernel in mm
     %operations   = ['fillholes', 'dilate', 'removesat']; 
-    operations   = [1, 1, 0]; 
+    operations   = [1, 1, 1]; 
 
     % fillholes = fill any hole in the ROI. Pass '' to not apply this
     %             operation

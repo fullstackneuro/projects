@@ -5,7 +5,7 @@ function s_gen_dtiInit
 
 datapath = '/media/lcne/matproc';
 
-subjects = {'ss160804','am160805'};
+subjects = {'uk160917_tmp'};
         
 for isubj = 1:length(subjects)
     % Build the file names for dwi, bvecs/bvals

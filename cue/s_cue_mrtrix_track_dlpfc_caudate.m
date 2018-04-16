@@ -1,4 +1,4 @@
-function fibersPDB = s_cue_mrtrix_track_vlpfc_shortins
+function fibersPDB = s_cue_mrtrix_track_dlpfc_caudate
 %
 % This functions shows how to track between two ROIS using mrtrix.
 % This si very helpful for ideintifying some fiber groups for example the
@@ -26,10 +26,30 @@ function fibersPDB = s_cue_mrtrix_track_vlpfc_shortins
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/storg/matproc/';
+baseDir = '/media/lcne/matproc/';
 
-subjects = {};      
-        
+subjects = {'at160601','cg160715','jf160703','lm160914','mr170621','nc160905','rf170610', ...
+            'rs160730','rv160413','tj160529','zm160627'};
+%{
+lcne done
+'jb161004','rc161007','se161021','mr161024', ...
+            'gm161101','hw161104','ph161104','kd170115', ...
+            'er170121','al170316','jd170330','jw170330', ...
+            'tg170423','jc170501','hp170601','rl170603'
+lcne
+'am160914','cm160510','ja160416','ps160508','rt160420','yl160507','ac160415', ...
+'ag151024','aa151010','al151016','dw151003','ie151020','ja151218', ...
+'jh160702','jr160507','kn160918','ld160918','li160927','mp160511'
+?'tm160117',
+storg
+'bb160402','bp160213','jc160320','jc160321','jg151121','jn160403','pk160319', ...
+'ps151001','rb160407','rf160313','rp160205','si151120','sr151031','ss160205', ...
+'tf151127','vm151031','wh160130','wr151127','zl150930','jw160316','as160129', ...
+'cs160214','kl160122','jv151030',
+%}
+
+hemis = {'lh','rh'};
+            
 for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
@@ -37,12 +57,13 @@ for isubj = 1:length(subjects)
     dtFile = fullfile(baseDir, subjectDir, '/dti96trilin/dt6.mat');
     refImg = fullfile(baseDir, subjectDir, subjectRefImg);
     fibersFolder  = fullfile(baseDir, subjectDir, '/dti96trilin/fibers/mrtrix/');
-    
+    roiFolder = fullfile(baseDir, subjectDir, 'ROIs');
+       
     % We want to track the subcortical pathway
-    fromRois = {'rh_caud_aseg'};
-    toRois   = {'rh_latorb_a2009s_fd','rh_frontorb_a2009s_fd','rh_frontinfang_a2009s_fd'};
-    wmMaskName = fullfile(baseDir, subjectDir, '/ROIs/rh_wmmask_vlpfc_fd');
-
+    fromRois = '_caud_aseg';
+    toRois   = {'_frontorb_a2009s_fd','_frontmidlat_a2009s_fd'};
+    wmMaskFS = '_wmmask_fs_fd';       
+    
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
     lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
@@ -52,94 +73,86 @@ for isubj = 1:length(subjects)
     initcutoff = 0.1; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
-    wmMask  = [];
+    wmMask = [];
     
-    % Make an (include) white matter mask ROI. This mask is the smallest
-    % set of white matter that contains both ROIS (fromRois and toRois)
-    %
-    % We use a nifti ROi to select the portion of the White matter to use for
-    % seeding
-    [~, wmMaskName] = dtiRoiNiftiFromMat(wmMaskName,refImg,wmMaskName,1);
+    for hemi = 1:length(hemis)
+        fromRoiHemi = [hemis{hemi} fromRois];
+        wmMaskHemi = [hemis{hemi} wmMaskFS];
+        wmMaskName = fullfile(roiFolder, wmMaskHemi);
     
-    % Then transform the niftis into .mif
-    [p,f,e] = fileparts(wmMaskName);
-    wmMaskMifName    = fullfile(p,sprintf('%s.mif',f));
-    wmMaskNiftiName  = sprintf('%s.nii.gz',wmMaskName);
-    mrtrix_mrconvert(wmMaskNiftiName, wmMaskMifName);
-    
-    % This first step initializes all the files necessary for mrtrix.
-    % This can take a long time.
-    files = mrtrix_init(dtFile,lmax,fibersFolder,wmMask);
-    
-    % Some of the following steps only need to be done once for each ROI,
-    % so we want to do some sort of unique operation on the from/toRois
-    individualRois = unique([fromRois, toRois]);
-    
-    % Convert the ROIs from .mat or .nii.gz to .mif format.
-    fromRoiName = fullfile(baseDir, subjectDir, '/ROIs/', fromRois{1});
-    [~, fromRoiName] = dtiRoiNiftiFromMat(fromRoiName, refImg, fromRoiName, 1);
-    fromRoiMifName    = fullfile(p,sprintf('%s.mif',fromRois{1}));
-    fromRoiNiftiName  = sprintf('%s.nii.gz',fromRoiName);
-    mrtrix_mrconvert(fromRoiNiftiName, fromRoiMifName);
-    
-    for i_roi = 1:length(toRois)
-        toRoiName = fullfile(baseDir, subjectDir, '/ROIs/', toRois{i_roi});
-        [~, toRoiName] = dtiRoiNiftiFromMat(toRoiName, refImg, toRoiName, 1);
-        toRoiMifName    = fullfile(p,sprintf('%s.mif',toRois{i_roi}));
-        toRoiNiftiName  = sprintf('%s.nii.gz',toRoiName);
-        mrtrix_mrconvert(toRoiNiftiName, toRoiMifName);
-    end
-    %for i_roi = 1:length(individualRois)
-    %    if exist(fullfile(p, [individualRois{i_roi}, '.nii.gz']),'file')
-    %       thisroi = fullfile(p, [individualRois{i_roi}, '.nii.gz']);
-    %
-    %  elseif  exist(fullfile(p, [individualRois{i_roi}, '.nii']),'file')
-    %     thisroi = fullfile(p, [individualRois{i_roi}, '.nii']);
-    %
-    %elseif   exist(fullfile(p, [individualRois{i_roi}, '.mat']),'file')
-    %     thisroi = fullfile(p, [individualRois{i_roi}, '.mat']);
-    %end
-    
-    %mrtrix_mrconvert(thisroi,refImg);
-    %end
-    
-    % Create joint from/to Rois to use as a mask
-    for nRoi = 1:length(toRois)
-        % MRTRIX tracking between 2 ROIs template.
-        roi{1} = fullfile(baseDir, subjectDir, '/ROIs/', fromRois{1});
-        roi{2} = fullfile(baseDir, subjectDir, '/ROIs/', toRois{nRoi});
-        
-        roi1 = dtiRoiFromNifti([roi{1} '.nii.gz'],[],[],'.mat');
-        roi2 = dtiRoiFromNifti([roi{2} '.nii.gz'],[],[],'.mat');
-        
-        % Make a union ROI to use as a seed mask:
-        % We will generate as many seeds as requested but only inside the voume
-        % defined by the Union ROI.
+        % Make an (include) white matter mask ROI. This mask is the smallest
+        % set of white matter that contains both ROIS (fromRois and toRois)
         %
-        % The union ROI is used as seed, fibers will be generated starting ONLy
-        % within this union ROI.
-        roiUnion        = roi1; % seed union roi with roi1 info
-        roiUnion.name   = ['union of ' roi1.name ' and ' roi2.name]; % r lgn calcarine';
-        roiUnion.coords = vertcat(roiUnion.coords,roi2.coords);
-        roiName         = fullfile(baseDir, subjectDir, '/ROIs/',[roi1.name '_' roi2.name '_union']);
-        [~, seedMask]   = dtiRoiNiftiFromMat(roiUnion,refImg,roiName,1);
-        seedRoiNiftiName= sprintf('%s.nii.gz',seedMask);
-        seedRoiMifName  = sprintf('%s.mif',seedMask);
+        % We use a nifti ROi to select the portion of the White matter to use for
+        % seeding
+        [~, wmMaskName] = dtiRoiNiftiFromMat(wmMaskName,refImg,wmMaskName,1);
         
-        % Transform the niftis into .mif
-        mrtrix_mrconvert(seedRoiNiftiName, seedRoiMifName);
+        % Then transform the niftis into .mif
+        [p,f,e] = fileparts(wmMaskName);
+        wmMaskMifName    = fullfile(p,sprintf('%s.mif',f));
+        wmMaskNiftiName  = sprintf('%s.nii.gz',wmMaskName);
+        mrtrix_mrconvert(wmMaskNiftiName, wmMaskMifName);
         
-        % We cd into the folder where we want to sae the fibers.
-        cd(fibersFolder);
+        % This first step initializes all the files necessary for mrtrix.
+        % This can take a long time.
+        files = mrtrix_init(dtFile,lmax,fibersFolder,wmMask);
         
-        % We genenrate and save the fibers in the current folder.
-        [fibersPDB{nRoi}, status, results] = s_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
-            seedRoiMifName, wmMaskMifName, trackingAlgorithm{1}, ...
-            maxNFibers2try2find, maxNFibers2try, cutoff, initcutoff, curvature, stepsize);
+        % Convert the ROIs from .mat or .nii.gz to .mif format.
+        fromRoiName = fullfile(baseDir, subjectDir, '/ROIs/', fromRoiHemi);
+        [~, fromRoiName] = dtiRoiNiftiFromMat(fromRoiName, refImg, fromRoiName, 1);
+        fromRoiMifName    = fullfile(p,sprintf('%s.mif',fromRoiHemi));
+        fromRoiNiftiName  = sprintf('%s.nii.gz',fromRoiName);
+        mrtrix_mrconvert(fromRoiNiftiName, fromRoiMifName);
         
-        %fgWrite(fibersPDB,['fibername'],'pwd')
+        % loop across toRois, must recreate hemisphere name
+        for i_roi = 1:length(toRois)
+            toRoiHemi = [hemis{hemi} toRois{i_roi}];
+            toRoiName = fullfile(baseDir, subjectDir, '/ROIs/', toRoiHemi);
+            [~, toRoiName] = dtiRoiNiftiFromMat(toRoiName, refImg, toRoiName, 1);
+            toRoiMifName    = fullfile(p,sprintf('%s.mif',toRoiHemi));
+            toRoiNiftiName  = sprintf('%s.nii.gz',toRoiName);
+            mrtrix_mrconvert(toRoiNiftiName, toRoiMifName);
+        end
+        
+        % Create joint from/to Rois to use as a mask
+        for nRoi = 1:length(toRois)
+            % MRTRIX tracking between 2 ROIs template.
+            roi{1} = fullfile(baseDir, subjectDir, '/ROIs/', fromRoiHemi);
+            % loop across toRois, must recreate hemisphere name
+            toRoiHemi = [hemis{hemi} toRois{nRoi}];
+            roi{2} = fullfile(baseDir, subjectDir, '/ROIs/', toRoiHemi);
+            
+            roi1 = dtiRoiFromNifti([roi{1} '.nii.gz'],[],[],'.mat');
+            roi2 = dtiRoiFromNifti([roi{2} '.nii.gz'],[],[],'.mat');
+            
+            % Make a union ROI to use as a seed mask:
+            % We will generate as many seeds as requested but only inside the voume
+            % defined by the Union ROI.
+            %
+            % The union ROI is used as seed, fibers will be generated starting ONLy
+            % within this union ROI.
+            roiUnion        = roi1; % seed union roi with roi1 info
+            roiUnion.name   = ['union of ' roi1.name ' and ' roi2.name]; % r lgn calcarine';
+            roiUnion.coords = vertcat(roiUnion.coords,roi2.coords);
+            roiName         = fullfile(baseDir, subjectDir, '/ROIs/',[roi1.name '_' roi2.name '_union']);
+            [~, seedMask]   = dtiRoiNiftiFromMat(roiUnion,refImg,roiName,1);
+            seedRoiNiftiName= sprintf('%s.nii.gz',seedMask);
+            seedRoiMifName  = sprintf('%s.mif',seedMask);
+            
+            % Transform the niftis into .mif
+            mrtrix_mrconvert(seedRoiNiftiName, seedRoiMifName);
+            
+            % We cd into the folder where we want to sae the fibers.
+            cd(fibersFolder);
+            
+            % We genenrate and save the fibers in the current folder.
+            [fibersPDB{nRoi}, status, results] = s_gen_mrtrix_track_roi2roi(files, [roi{1} '.mif'], [roi{2} '.mif'], ...
+                seedRoiMifName, wmMaskMifName, trackingAlgorithm{1}, ...
+                maxNFibers2try2find, maxNFibers2try, cutoff, initcutoff, curvature, stepsize);
+            
+            %fgWrite(fibersPDB,['fibername'],'pwd')
+        end
     end
-    
 end
 
 return

@@ -5,16 +5,9 @@ function s_cue_wmmask_clip_vlpfcstn
 %
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
-%datapath = '/media/lcne/matproc/';
 datapath = '/media/storg/matproc/';
 
-%subjects = {'am160914','kn160918','ld160918','li160927','ac160415','jh160702','jr160507','mp160511','ps160508'};
-
-subjects = {'ab071412','al151016','bb160402','bk032113','bp160213','cs160214','dc050213', ...
-            'ds080712','en062813','gr051513','hm062513','jc160320','jc160321','jg151121', ...
-            'jl071912','jt062413','jv151030','jw072512','jw160316','lc052213', ...
-            'mk021913','ml061013','np072412','pk160319','ps151001','pw060713','rb160407', ...
-            'rf160313','sp061313','wb071812','zl150930'};
+subjects = {'lf052813','sn061213','tw062113'};
         
 for isubj = 1:length(subjects)
     refImg = fullfile(datapath, subjects{isubj}, [subjects{isubj} '_t1_acpc.nii.gz']);

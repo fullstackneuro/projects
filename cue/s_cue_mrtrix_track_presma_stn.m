@@ -1,4 +1,4 @@
-function fibersPDB = s_cue_mrtrix_track_vlpfc_stn
+function fibersPDB = s_cue_mrtrix_track_presma_stn
 %
 % This functions shows how to track between two ROIS using mrtrix.
 % This si very helpful for ideintifying some fiber groups for example the
@@ -26,21 +26,21 @@ function fibersPDB = s_cue_mrtrix_track_vlpfc_stn
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/storg/matproc';
-
-subjects = {'jg151121'};
+baseDir = '/media/lcne/matproc';
+subjects = {'er170121','gm161101','hw161104','jw170330','ph161104'};
 
 %{
-'am160914','kn160918','ld160918','li160927
-'ac160415','jh160702','jr160507','mp160511','ps160508'
-'ab071412','al151016','bb160402','bk032113','bp160213','cs160214','dc050213', ...
-            'ds080712','en062813','gr051513','hm062513','jc160320','jc160321','jg151121', ...
-            'jl071912','jt062413','jv151030','jw072512','jw160316','lc052213', ...
-            'mk021913','ml061013','np072412','pk160319','ps151001','pw060713','rb160407', ...
-            'rf160313','sp061313','wb071812','zl150930'
-%}
+presma-stn and vlpfc-stn same
+storg
+'ec081912','jh042913','jo081312','kr030113','lf052813','ps022013','ra053013','sd040313','sh010813','sn061213','tw062113'
+lcne
+'er170121','gm161101','hw161104','jw170330','ph161104'
 
-hemis = {'lh'};
+left ains-vlpfc
+'ec081912','jh042913','jo081312','kr030113','lf052813','ps022013','ra053013','sd040313','sh010813','sn061213','tw062113'
+mpfc-nacc?
+%}
+hemis = {'lh','rh'};
             
 for isubj = 1:length(subjects)
 

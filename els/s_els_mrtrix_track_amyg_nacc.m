@@ -37,7 +37,6 @@ subjects = {'els006','els009','els012','els013','els014','els016','els017', ...
             'els074','els075','els076','els077','els079','els081','els083', ...
             'els085','els086','els087','els088','els089','els090'};
 %{
-
 %}
 hemis = {'lh','rh'};
             

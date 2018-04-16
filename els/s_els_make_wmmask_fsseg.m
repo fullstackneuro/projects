@@ -9,7 +9,7 @@ function s_els_make_wmmask_fsseg
 
 matProcDir = '/media/lcne/matproc';
 
-subjects = {'els049-T2'};
+subjects = {'els016','els026','els075'};
         
         %{
         'els006','els009','els012','els013',','els016','els017', ...
