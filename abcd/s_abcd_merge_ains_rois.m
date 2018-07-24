@@ -1,13 +1,10 @@
-function s_els_merge_ains_rois
+function s_abcd_merge_ains_rois
 % merges two mat rois, saves as single mat roi
 
-datapath = '/media/lcne/matproc';
+datapath = '/media/lcne/matproc/abcd';
 
-subjects = {'els137-Tmid','els144-Tmid','els145-Tmid','els146-Tmid','els152-Tmid','els159x-Tmid','els172-Tmid', ...
-            'els214-Tmid','els302-TK1','els303-TK1','els305-TK1','els307-TK1', ...
-            'els311-TK1','els312-TK1','els315-TK1','els318-TK1'};
-%'els193x-Tmid','els307x-TK1'
-
+subjects = {'sub-NDARINVZYLV9BMB'};
+            
 hemis = {'lh','rh'};
 
 for isubj = 1:length(subjects)

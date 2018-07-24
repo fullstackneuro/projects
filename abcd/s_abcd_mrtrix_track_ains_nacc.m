@@ -1,4 +1,5 @@
-function fibersPDB = s_els_mrtrix_track_ains_nacc
+function fibersPDB = s_abcd_mrtrix_track_ains_nacc
+
 %
 % This functions shows how to track between two ROIS using mrtrix.
 % This si very helpful for ideintifying some fiber groups for example the
@@ -26,12 +27,9 @@ function fibersPDB = s_els_mrtrix_track_ains_nacc
 %
 % Written by Franco Pestilli (c) Stanford University Vistasoft
 
-baseDir = '/media/lcne/matproc/';
+baseDir = '/media/lcne/matproc/abcd';
 
-subjects = {'els137-Tmid','els144-Tmid','els145-Tmid','els146-Tmid','els152-Tmid','els159x-Tmid','els172-Tmid', ...
-            'els214-Tmid','els302-TK1','els303-TK1','els305-TK1','els307-TK1', ...
-            'els311-TK1','els312-TK1','els315-TK1','els318-TK1'};
-%'els193x-Tmid','els307x-TK1'
+subjects = {'sub-NDARINVZYLV9BMB'};
 
 hemis = {'lh','rh'};
             
@@ -39,23 +37,23 @@ for isubj = 1:length(subjects)
 
     subjectDir    = [subjects{isubj}];
     subjectRefImg = [subjects{isubj} '_t1_acpc.nii.gz'];
-    dtFile = fullfile(baseDir, subjectDir, '/dti60trilin/dt6.mat');
+    dtFile = fullfile(baseDir, subjectDir, '/dti95trilin/dt6.mat');
     refImg = fullfile(baseDir, subjectDir, subjectRefImg);
-    fibersFolder  = fullfile(baseDir, subjectDir, '/dti60trilin/fibers/mrtrix/');
+    fibersFolder  = fullfile(baseDir, subjectDir, '/dti95trilin/fibers/mrtrix/');
     roiFolder = fullfile(baseDir, subjectDir, 'ROIs');
        
     % We want to track the subcortical pathway
-    fromRois = '_antshortins_fd';
-    toRois   = {'_nacc_aseg_fd'};
+    fromRois = '_nacc_aseg_fd';
+    toRois   = {'_antshortins_fd'};
     wmMaskFS = '_wmmask_fs_fd';       
     
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
-    lmax    = [6]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
+    lmax    = [10]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
     maxNFibers2try = 500000; %1000000; % this is the max number of fibers to try before giving up
-    cutoff = 0.1; %FA cutoff along path
-    initcutoff = 0.1; %FA cutoff at seed
+    cutoff = 0.075; %FA cutoff along path
+    initcutoff = 0.075; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
     wmMask = [];

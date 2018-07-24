@@ -1,4 +1,4 @@
-function s_els_clean_mfbafiberoutlier_ains_nacc
+function s_abcd_clean_mfbafiberoutlier_ains_nacc
 
 %script to cleaning fiber group outliers (ains-vlpfc and amyg-nacc)
 

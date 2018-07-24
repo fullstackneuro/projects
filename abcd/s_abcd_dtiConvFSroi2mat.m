@@ -1,20 +1,22 @@
-function s_els_dtiConvFSroi2mat
+function s_abcd_dtiConvFSroi2mat
 %
 % This function loads a series of subjects and performs 
 % dtiConvertFreeSurferRoiToMat for each one of them
 %
 
-matpath  = '/media/lcne/matproc';
+matpath  = '/media/lcne/matproc/abcd';
 
-subjects = {'els137-Tmid','els144-Tmid','els145-Tmid','els146-Tmid','els152-Tmid','els159x-Tmid','els172-Tmid', ...
-            'els214-Tmid','els302-TK1','els303-TK1','els305-TK1','els307-TK1','els307x-TK1', ...
-            'els311-TK1','els312-TK1','els315-TK1','els318-TK1'};
-        
+subjects = {'sub-NDARINVZYLV9BMB'};
+
 for isubj = 1:length(subjects)
     % Build the file names for aseg.nii.gz
-    matProcPath = fullfile(matpath, subjects{isubj});
-    asegPath  = fullfile(matProcPath,'ROIs','a2009seg2acpc.nii.gz');
- 
+    matProcPath   = fullfile(matpath, subjects{isubj}, 'ROIs');
+    asegFile  = dir(fullfile(matProcPath,'a2009seg2acpc.nii.gz'));
+    asegFname = asegFile.name;
+    asegPath  = fullfile(matProcPath, asegFname);
+
+    %create mat rois based on fs seg lookup table
+    
     % pfc
     dtiConvertFreeSurferRoiToMat(asegPath, 11113, 'lh_frontorb_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 12113, 'rh_frontorb_a2009s');
@@ -71,5 +73,5 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 60, 'rh_ventraldc_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 18, 'lh_amyg_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 54, 'rh_amyg_aseg');
-
+    
 end

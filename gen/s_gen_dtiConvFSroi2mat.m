@@ -1,4 +1,4 @@
-function s_dtiConvFSroi2mat
+function s_gen_dtiConvFSroi2mat
 %
 % This function loads a series of subjects and performs 
 % dtiConvertFreeSurferRoiToMat for each one of them

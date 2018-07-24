@@ -1,4 +1,4 @@
-function s_els_fe_make_wmmask_fsseg
+function s_abcd_make_wmmask_fsseg
 %
 % This script makes the white-matter mask from freesurfer segmentation
 % used to track the connectomes in Pestilli et al., LIFE paper.
@@ -6,20 +6,17 @@ function s_els_fe_make_wmmask_fsseg
 % Copyright Franco Pestilli (c) Stanford University, 2014
 
 % Get the base directory for the data
-matProcDir = '/media/lcne/matproc';
 
-%subjects
-subjects = {'els137-Tmid','els144-Tmid','els145-Tmid','els146-Tmid','els152-Tmid','els159x-Tmid','els172-Tmid', ...
-            'els214-Tmid','els302-TK1','els303-TK1','els305-TK1','els307-TK1', ...
-            'els311-TK1','els312-TK1','els315-TK1','els318-TK1'};
-%'els193x-Tmid','els307x-TK1'
-            
+matProcDir = '/media/lcne/matproc/abcd';
+
+subjects = {'sub-NDARINVZYLV9BMB'};
+        
 for isubj = 1:length(subjects)
     %subjectFolder = fullfile(baseDir, subjects{isubj});
     %fsMriFolder = fullfile(subjectFolder, 'mri');
     matRoiFolder = fullfile(matProcDir,subjects{isubj},'ROIs');
      
-    wmMaskFile = fullfile(matRoiFolder,'rh_wmmask_fs.nii.gz'); 
+    wmMaskFile = fullfile(matRoiFolder,'lh_wmmask_fs.nii.gz'); 
     [~,wmMaskFileName,~] = fileparts(wmMaskFile);
     wmMaskFileName = wmMaskFileName(1:end-4); %strip .nii after .gz
     
@@ -27,10 +24,9 @@ for isubj = 1:length(subjects)
         
     eval(sprintf('!mri_convert  --out_orientation RAS %s %s', fs_wm{1}, wmMaskFile));
     wm = niftiRead(wmMaskFile);
-    invals = [16 41 49 50 51 52 58 60 12106 12107 12108 12109 12110 12113 12115 12116 12117 12118 12124 12139 12148 12149 11154 12155 12163 12164 12165];
+    invals = [16 2 10 11 12 13 26 28 11106 11107 11108 11109 11110 11113 11115 11116 11117 11118 11124 11139 11148 11149 11154 11155 11163 11164 11165];
     %lh 16 2 10 11 12 13 26 28 11106 11107 11108 11109 11110 11113 11115 11116 11117 11118 11124 11139 11148 11149 11154 11155 11163 11164 11165
     %rh 16 41 49 50 51 52 58 60 12106 12107 12108 12109 12110 12113 12115 12116 12117 12118 12124 12139 12148 12149 11154 12155 12163 12164 12165
-    
     origvals = unique(wm.data(:));
     fprintf('\n[%s] Converting voxels... ',mfilename);
     wmCounter=0;noWMCounter=0;
@@ -67,5 +63,4 @@ for isubj = 1:length(subjects)
     dtiWriteRoi(roi,wmMaskRoiMat);
     fprintf('\nwriting file %s\n',fullfile(wmMaskRoiMat));
 end
-
-end % Main function
+end
