@@ -1,4 +1,4 @@
-function fibersPDB = s_duke_mrtrix_track_amyg_nacc
+function fibersPDB = s_duke_mrtrix_track_mpfc_nacc
 
 %
 % This functions shows how to track between two ROIS using mrtrix.
@@ -29,13 +29,15 @@ function fibersPDB = s_duke_mrtrix_track_amyg_nacc
 
 baseDir = '/cylon/matproc';
 
-subjects = {'dnd045', 'dnd077'};
- 
+subjects = {'dnd029', 'dnd039', 'dnd060', 'dnd069', 'dnd070', 'dnd092', 'dnd097', 'dnd099', 'dnd109', 'dnd114', 'dnd121'};      
+ %{
+       val146','val147','val149','val150','val151','val152', ...
+       'val153', 'val157', 
+       %}
 %dnd040 no dwi
 %dnd012 no dt6
 %val053 no dwi
 %'val146 failed
-
 
 hemis = {'lh','rh'};
             
@@ -50,14 +52,14 @@ for isubj = 1:length(subjects)
        
     % We want to track the subcortical pathway
     fromRois = '_nacc_aseg_fd';
-    toRois   = {'_amyg_aseg_fd'};
+    toRois   = {'_mpfc_5mm'};
     wmMaskFS = '_wmmask_fs_fd';       
     
     % Set up the MRtrix tracking parameters
     trackingAlgorithm = {'prob'};
     lmax    = [6]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
-    maxNFibers2try2find  = 2000; % 10000; % this the number of fibers to find
-    maxNFibers2try = 200000; %1000000; % this is the max number of fibers to try before giving up
+    maxNFibers2try2find  = 5000; % 10000; % this the number of fibers to find
+    maxNFibers2try = 1000000; %1000000; % this is the max number of fibers to try before giving up
     cutoff = 0.05; %FA cutoff along path
     initcutoff = 0.05; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature

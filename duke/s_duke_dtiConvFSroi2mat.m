@@ -6,17 +6,11 @@ function s_duke_dtiConvFSroi2mat
 
 matpath  = '/cylon/matproc';
 
-subjects = {'dnd005','dnd006','dnd007','dnd011','dnd013','dnd014', ...
-            'dnd016','dnd018','dnd019','dnd021','dnd022','dnd023','dnd027', ...
-            'dnd029','dnd030','dnd031','dnd032','dnd033','dnd034','dnd037', ...
-            'dnd039','dnd041','dnd042','dnd043','dnd044','dnd045', ...
-            'dnd046','dnd048','dnd050','dnd052','dnd057','dnd058','dnd060', ...
-            'dnd062','dnd065','dnd069','dnd070','dnd072','dnd073','dnd074', ...
-            'dnd077','dnd078','dnd080','dnd083','dnd084','dnd087','dnd088', ...
-            'dnd089','dnd090','dnd091','dnd092','dnd093','dnd094','dnd096', ...
-            'dnd097','dnd098','dnd099','dnd100','dnd102','dnd104','dnd105', ...
-            'dnd107','dnd109','dnd110','dnd111','dnd113','dnd114','dnd115', ...
-            'dnd118','dnd119','dnd121'};
+subjects = {'dnd029', 'dnd039', 'dnd060', 'dnd069', 'dnd070', 'dnd092', 'dnd097', 'dnd099', 'dnd109', 'dnd114', 'dnd121'};
+
+
+%lh 16 2 10 11 12 13 26 28 11106 11107 11108 11109 11110 11113 11115 11116 11117 11118 11124 11139 11148 11149 11154 11155 11163 11164 11165
+%rh 16 41 49 50 51 52 58 60 12106 12107 12108 12109 12110 12113 12115 12116 12117 12118 12124 12139 12148 12149 11154 12155 12163 12164 12165
 
 for isubj = 1:length(subjects)
     % Build the file names for aseg.nii.gz
@@ -26,7 +20,7 @@ for isubj = 1:length(subjects)
     asegPath  = fullfile(matProcPath, asegFname);
 
     %create mat rois based on fs seg lookup table
-    %{
+    
     % pfc
     dtiConvertFreeSurferRoiToMat(asegPath, 11113, 'lh_frontorb_a2009s');
     dtiConvertFreeSurferRoiToMat(asegPath, 12113, 'rh_frontorb_a2009s');
@@ -81,8 +75,7 @@ for isubj = 1:length(subjects)
     dtiConvertFreeSurferRoiToMat(asegPath, 16, 'brainstem_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 28, 'lh_ventraldc_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 60, 'rh_ventraldc_aseg');
-    %}
+    
     dtiConvertFreeSurferRoiToMat(asegPath, 18, 'lh_amyg_aseg');
     dtiConvertFreeSurferRoiToMat(asegPath, 54, 'rh_amyg_aseg');
-    
 end

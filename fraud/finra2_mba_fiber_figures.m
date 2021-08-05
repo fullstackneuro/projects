@@ -41,7 +41,8 @@ mbaDisplayBrainSlice(ti,[-3 0 0])
 hold on
 mbaDisplayBrainSlice(ti,[0 -28 0])
 mbaDisplayBrainSlice(ti,[0 0 -13])
-%[fh, lh] = mbaDisplayConnectome(lmpfc.fibers,fgh,[0.7,0.98,0.98],'single',[],[],.3);
+%[fh, lh] =
+%mbaDisplayConnectome(lmpfc.fibers,fgh,[0.7,0.98,0.98],'single',[],[],.3);
 %delete(lh);
 [fh, lh] = mbaDisplayConnectome(linsula.fibers,fgh,[0.7,0.4,0.4],'single',[],[],.3);
 delete(lh);

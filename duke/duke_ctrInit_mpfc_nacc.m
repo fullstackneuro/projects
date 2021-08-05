@@ -7,7 +7,7 @@ mpfcctr.logName = 'rmpfcnacc';
 mpfcctr.baseDir = '/cylon/matproc';
 mpfcctr.dtDir = 'dti64trilin';
 mpfcctr.roiDir = 'ROIs';
-mpfcctr.subs = {};
+mpfcctr.subs = {'dnd029', 'dnd039', 'dnd060', 'dnd069', 'dnd070', 'dnd092', 'dnd097', 'dnd099', 'dnd109', 'dnd114', 'dnd121'};  
  %{
 'dnd005','dnd006','dnd007','dnd011','dnd013','dnd014', ...
                 'dnd016','dnd018','dnd019','dnd021','dnd022','dnd023','dnd027'
@@ -28,7 +28,7 @@ mpfcctr.roi2 = 'rh_nacc_aseg_fd.mat';
 %tracking
 %ctrInitBatchTrack(mpfcctr);
 %scoring
-ctrInitBatchScore('/cylon/matproc/ConTrack/mpfcnacc/logs/mpfcnacc_lmpfcnacc_ctrInitLog_18-Jan-2021_16h07m45s.mat', 500,1);
+%ctrInitBatchScore('/cylon/matproc/ConTrack/mpfcnacc/logs/mpfcnacc_lmpfcnacc_ctrInitLog_18-Jan-2021_16h07m45s.mat', 500,1);
 
 
 %left hemisphere
@@ -38,7 +38,7 @@ lmpfcctr.logName = 'lmpfcnacc';
 lmpfcctr.baseDir = '/cylon/matproc';
 lmpfcctr.dtDir = 'dti64trilin';
 lmpfcctr.roiDir = 'ROIs';
-lmpfcctr.subs = {};
+lmpfcctr.subs = {'dnd029', 'dnd039', 'dnd060', 'dnd069', 'dnd070', 'dnd092', 'dnd097', 'dnd099', 'dnd109', 'dnd114', 'dnd121'};
 lmpfcctr.roi1 = 'lh_mpfc_5mm.mat';
 lmpfcctr.roi2 = 'lh_nacc_aseg_fd.mat';
 %tracking

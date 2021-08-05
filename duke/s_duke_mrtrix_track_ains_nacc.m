@@ -29,20 +29,15 @@ function fibersPDB = s_duke_mrtrix_track_ains_nacc
 
 baseDir = '/cylon/matproc';
 
-subjects = {'dnd005','dnd006','dnd007','dnd011','dnd013','dnd014', ...
-            'dnd016','dnd018','dnd019','dnd021','dnd022','dnd023','dnd027', ...
-            'dnd029','dnd030','dnd031','dnd032','dnd033','dnd034','dnd037', ...
-            'dnd039','dnd041','dnd042','dnd043','dnd044','dnd045', ...
-            'dnd046','dnd048','dnd050','dnd052','dnd057','dnd058','dnd060', ...
-            'dnd062','dnd065','dnd069','dnd070','dnd072','dnd073','dnd074', ...
-            'dnd077','dnd078','dnd080','dnd083','dnd084','dnd087','dnd088', ...
-            'dnd089','dnd090','dnd091','dnd092','dnd093','dnd094','dnd096', ...
-            'dnd097','dnd098','dnd099','dnd100','dnd102','dnd104','dnd105', ...
-            'dnd107','dnd109','dnd110','dnd111','dnd113','dnd114','dnd115', ...
-            'dnd118','dnd119','dnd121'};
- 
+subjects = {'dnd013', 'dnd048', 'dnd050', 'dnd052', 'dnd092', 'dnd111', 'dnd114', 'dnd121'};      
+ %{
+       val146','val147','val149','val150','val151','val152', ...
+       'val153', 'val157', 
+       %}
 %dnd040 no dwi
 %dnd012 no dt6
+%val053 no dwi
+%'val146 failed
 
 hemis = {'lh','rh'};
             
@@ -65,8 +60,8 @@ for isubj = 1:length(subjects)
     lmax    = [6]; % The appropriate value depends on # of directions. For 32, use lower #'s like 4 or 6. For 70+ dirs, 6 or 10 is good [10];
     maxNFibers2try2find  = 2000; % 10000; % this the number of fibers to find
     maxNFibers2try = 200000; %1000000; % this is the max number of fibers to try before giving up
-    cutoff = 0.1; %FA cutoff along path
-    initcutoff = 0.1; %FA cutoff at seed
+    cutoff = 0.05; %FA cutoff along path
+    initcutoff = 0.05; %FA cutoff at seed
     curvature = 1; %curvature radius. formula: angle = 2 * asin (S / (2*R)), S=step-size, R=radius of curvature
     stepsize = 0.2; %voxel-voxel step distance
     wmMask = [];
