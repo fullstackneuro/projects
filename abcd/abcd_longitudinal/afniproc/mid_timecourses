@@ -1,0 +1,51 @@
+#!/bin/bash
+
+
+## Read in project folder from json file
+projpath=`cat args.json | jq -r ".out"`
+
+## Read in subject textfile
+txtfile=`cat args.json | jq -r ".txt"`
+
+## Read in timeval to use
+tval=`cat args.json | jq -r ".timeval"`
+
+## Define anat file, mask files, and regfile to use
+mni_anatfile=anatmni
+mni_masks=(nacc8mm_mni ains8mmkg_mni mpfc8mm_mni MNI152_prob_atlas_vta_pauli_thr03_bin_short)
+regfile=mid_mbnf
+
+
+## Loop across subjects in subject textfile
+for sub in `cat $txtfile`; do
+
+	echo $sub
+
+	## Enter subject directory
+	cd $projpath'/'$tval'/afniproc/'$sub
+
+	#produce timecourses for each of the mni masks
+	for maskfile in ${mni_masks[@]}; do
+
+		if test -f ${regfile}_${maskfile}+orig.HEAD; then
+			rm ${regfile}_${maskfile}+orig*
+		fi
+
+		3dfractionize -template ${regfile}+orig -input $projpath/masks/$maskfile+tlrc -warp ${mni_anatfile}+tlrc \
+			-clip 0.1 -preserve -prefix ${regfile}_${maskfile}
+
+		if test -f l${maskfile}.tc; then
+			rm l${regfile}_${maskfile}.1D
+		fi
+		if test -f r${maskfile}.tc; then
+			rm r${regfile}_${maskfile}.1D
+		fi
+		if test -f b${maskfile}.tc; then
+			rm b${regfile}_${maskfile}.1D
+		fi
+
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 1 1 ${regfile}+orig > l${regfile}_${maskfile}.1D
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 2 2 ${regfile}+orig > r${regfile}_${maskfile}.1D
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 1 2 ${regfile}+orig > b${regfile}_${maskfile}.1D
+	done
+done

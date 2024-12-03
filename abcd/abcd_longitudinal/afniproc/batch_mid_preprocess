@@ -1,0 +1,53 @@
+#!/bin/bash
+
+## Determine the number of cores for multithreading
+ncores=`nproc --all`
+
+## Read in project folder path from json file
+projpath=`cat args.json | jq -r '.out'`
+
+## Read in parallel proc bool
+par=`cat args.json | jq -r '.par'`
+
+## Read in timepoint to use
+tval=`cat args.json | jq -r '.timeval'`
+
+## Read in subject txtfile
+txtfile=`cat args.json | jq -r '.txt'`
+
+## Generate afniproc dir in project folder based on year
+if ! test -d $projpath"/"$tval"/afniproc"; then
+	mkdir $projpath"/"$tval"/afniproc"
+fi
+
+## If parallel trigger set to true, run as many instances of preprocessing as there are cores available
+cmdstring=""
+if [ $par -eq 1 ]; then
+	nsubs=`cat $txtfile | wc -l`
+	nsplit=$(( nsubs / ncores ))
+	nsplit=$(( nsplit + 1 ))
+
+	nterm=$(( nsubs / nsplit ))
+	nterm=$(( nterm + 1 ))
+
+	split -l $nsplit $txtfile ${txtfile::-4}"_" -a 2 --numeric-suffixes=1
+	for ((num=1;num<nterm;num++)); do
+
+		if [ $num -lt 10 ]; then
+			numstring="0"$num
+		else
+			numstring=$num
+		fi
+		cmdstring=$cmdstring" gnome-terminal -- ./mid_preprocess "${txtfile::-4}"_"$numstring" &"
+
+	done
+
+	cmdstring=${cmdstring::-2}
+
+
+else
+	cmdstring="./mid_preprocess "$txtfile
+fi
+
+echo $cmdstring
+eval $cmdstring
