@@ -1,0 +1,45 @@
+#!/bin/bash
+
+echo "Inputs will be used to create json file"
+echo "Leave blank processes you will not perform"
+echo ""
+echo "Input path to t1 tar files:"
+read tart1
+echo ""
+echo "Input path to dmri tar files:"
+read tardmri
+echo ""
+echo "Input path to fmri tar files:"
+read tarfmri
+echo ""
+echo "Input path to mid behavior files"
+read zipmid
+echo""
+echo "Input path to project directory (outputs will be stored here):"
+read output
+echo ""
+echo "Input path to subject text file:"
+read txtfile
+echo""
+while true; do
+	echo "Input timepoint (Baseline, 2Year, 4Year):"
+	read tval
+	if [ "$tval" = "Baseline" ] || [ "$tval" = "2Year" ] || [ "$tval" = "4Year" ]; then
+		break
+	fi
+	echo "Error: do not recognize timepoint. Please input Baseline, 2Year, or 4Year"
+done
+
+JSON_STRING=$( jq -n \
+		--arg t1 $tart1 \
+		--arg dmri $tardmri \
+		--arg fmri $tarfmri \
+		--arg out $output \
+		--arg txt $txtfile \
+		--arg tp $tval \
+		--arg zip $zipmid \
+		'{t1: $t1, dmri: $dmri, fmri: $fmri, out: $out, txt: $txt, timeval: $tp, zip: $zip}' )
+
+
+
+echo $JSON_STRING >> args.json

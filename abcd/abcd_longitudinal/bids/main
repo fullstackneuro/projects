@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if ! test -f args.json; then
+	./create_json
+fi
+
+./tar2bids_anat_json
+
+./tar2bids_dmri_json
+
+./tar2bids_fmri_json

@@ -1,0 +1,55 @@
+#!/bin/bash
+
+## Establish path to raw zip files
+zippath=`cat args.json | jq -r '.zip'`
+
+## Establish path to project folder
+projpath=`cat args.json | jq -r '.out'`
+
+## Read in timepoint to use
+tval=`cat args.json | jq -r '.timeval'`
+
+## Generate bids dir in project folder based on year, if it does not already exist
+if ! test -d $projpath"/"$tval; then
+	mkdir $projpath"/"$tval
+	mkdir $projpath"/"$tval"/bids"
+fi
+if ! test -d $projpath"/"$tval"/bids"; then
+	mkdir $projpath"/"$tval"/bids"
+fi
+
+## Read in textfile containing subject IDs
+txtfile=`cat args.json | jq -r '.txt'`
+
+## Append .txt extension if it isn't already present
+if [[ $txtfile != *".txt" ]]; then
+	txtfile=$txtfile".txt"
+fi
+
+## Loop through subject IDs
+for name in `cat $txtfile`; do
+
+	echo $name
+	if ! test -d $projpath"/"$tval"/bids/"$name; then
+		mkdir $projpath"/"$tval"/bids/"$name
+	fi
+
+	if ! test -d $projpath"/"$tval"/bids/"$name"/behav"; then
+		mkdir $projpath"/"$tval"/bids/"$name"/behav"
+	fi
+
+	## Modify subject ID and tval to match format found in behavior zip file dir
+	id=${name:0:4}"_"${name:4:1000}
+	if [[ $tval != "Baseline" ]]; then
+		newtval=${tval:0:1}"_year"
+	else
+		newtval="baseline"
+	fi
+
+	## Unzip behav csv file and place in bids folder
+	unzip $zippath"/"$id"_"$newtval*"mid.zip" -d $projpath"/"$tval"/bids/"$name"/behav"
+
+	## Move resulting behavior file up 2 directories. Remove extraneous folders
+	mv $projpath"/"$tval"/bids/"$name"/behav/MID/"*"/"$id"_"$newtval*"mid.csv" $projpath"/"$tval"/bids/"$name"/behav/"$name"_behavior.csv"
+	rm -r $projpath"/"$tval"/bids/"$name"/behav/MID"
+done
