@@ -1,0 +1,111 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 1119
+'[ark@ark: Tue Nov 19 11:50:58 2024] ===================================\n[ark@ark: Tue Nov 19 11:50:58 2024] === History of inputs to 3dcalc ===\n[ark@ark: Tue Nov 19 11:50:58 2024] === Input a:\n[ark@ark: Tue Nov 19 11:50:58 2024] [ark@ark: Tue Nov 19 11:46:04 2024] {AFNI_22.1.14:linux_ubuntu_16_64} 3dcalc -a MNI152_vta_thr03_bin.nii.gz -expr '(a*isnegative(x))' -prefix lh_MNI152_vta_thr03_bin.nii.gz\n[ark@ark: Tue Nov 19 11:50:58 2024] === Input b:\n[ark@ark: Tue Nov 19 11:50:58 2024] [ark@ark: Tue Nov 19 11:44:37 2024] {AFNI_22.1.14:linux_ubuntu_16_64} 3dcalc -a MNI152_vta_thr03_bin.nii.gz -expr '(a*ispositive(x))' -prefix MNI152_vta_thr03_bin_lh.nii.gz\n[ark@ark: Tue Nov 19 11:50:58 2024] ===================================\n[ark@ark: Tue Nov 19 11:50:58 2024] {AFNI_22.1.14:linux_ubuntu_16_64} 3dcalc -a lh_MNI152_vta_thr03_bin.nii.gz -b rh_MNI152_vta_thr03_bin.nii.gz -expr '(1*b + 2*a)' -prefix MNI152_vta_thr03_bin_index.nii.gz\n[ark@ark: Thu Nov 21 11:07:05 2024] {AFNI_22.1.14:linux_ubuntu_16_64} 3dcopy MNI152_prob_atlas_vta_pauli_thr03_bin_short.nii.gz MNI152_prob_atlas_vta_pauli_thr03_bin_short~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_ANAT~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'AFN_cefagFcaeBYwwa-glou5hA~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Thu Nov 21 11:07:05 2024~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 2 11 0 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 1 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+             96            132            -78
+
+type  = float-attribute
+name  = DELTA
+count = 3
+             -1             -1              1
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+             -1              0              0             96              0
+             -1              0            132              0              0
+              1            -78
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+             -1              0              0             96              0
+             -1              0            132              0              0
+              1            -78
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 2
+              0              2
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 1 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 193 229 193 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 1
+ 1
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 1
+              0
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 5
+'TLRC~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~
