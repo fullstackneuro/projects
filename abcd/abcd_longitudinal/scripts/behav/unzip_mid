@@ -1,0 +1,79 @@
+#!/bin/bash
+
+#set behavior zip file location
+zip_path='/mnt/bacon/raw/abcd/behav/abcd_mid_behav_release_5-1/abcd_midtlb01'
+
+#set location to unzip (bids, preferably)
+extract_path='/mnt/acorn/ethan/bids'
+
+#set path to list of subject files to unzip
+sub_list='/mnt/acorn/ethan/scripts/behav/subs.txt'
+
+
+
+#move into the directory for file placement
+cd $extract_path
+
+
+#loop through subject files, unzip from zip location to extract location
+for file in `cat $sub_list`; do
+	echo $file #print out working file to terminal
+	zip_file=$zip_path'/'$file #construct path to zip file
+	subject_folder=$extract_path'/sub-'${file:0:4}''${file:5:11} #construct path to subject folder as it exists in bids. This is just a bunch of string concatenation.
+
+	#check if subject folder exists in bids already. If not, make it.
+	if ! test -d $unzip_folder; then
+		echo 'creating bids folder for subject...'
+		mkdir $unzip_folder
+	fi
+
+	#check timepoint. This will determine appropriate bids subfolder for file placement.
+	if  [[ $file == *"baseline"* ]]; then
+		timepoint='ses-baselineYear1Arm1'
+	elif [[ $file == *"2_year"* ]]; then
+		timepoint='ses-2YearFollowUpYArm1'
+	elif [[ $file == *"4_year"* ]]; then
+		timepoint='ses-4YearFollowUpYArm1'
+	fi
+
+	#if the timepoint folder for this subject doesn't already exist, create it
+	if ! test -d $subject_folder'/'$timepoint; then
+		mkdir $subject_folder'/'$timepoint
+	fi
+
+	#generate bath to behavior folder under relevant timepoint
+	unzip_folder=$subject_folder'/'$timepoint'/behav'
+
+	#if this folder doesn't already exist, create it
+	if ! test -d $unzip_folder; then
+		mkdir $unzip_folder
+	fi
+
+	echo $zip_file
+	#unzip behavior files for MID into subject behavior folder
+	unzip $zip_file -d $unzip_folder
+
+
+	#when unzipped, placed under MID folder, then timepoint folder below that. Want to move the csv up to be under behav directory
+
+	#set name of timepoint folder under newly created MID folder
+	if [[ $file == *"baseline"* ]]; then
+		mid_tp='baseline_year_1_arm_1'
+	elif [[ $file == *"2_year"* ]]; then
+		mid_tp='2_year_follow_up_y_arm_1'
+	elif [[ $file == *"4_year"* ]]; then
+		mid_tp='4_year_follow_up_y_arm_1'
+	fi
+
+	#move the behavior file up to the behav folder, then remove the MID folder
+	mv $unzip_folder'/MID/'$mid_tp'/'* $unzip_folder'/.'
+	rm $unzip_folder'/MID' -r
+
+done
+
+
+
+
+
+
+
