@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#set path to matproc dir
+matprocPath='/mnt/acorn/ethan/matproc'
+
+#set path to mask templates
+templatePath='/mnt/acorn/ethan/scripts/templates/masks'
+
+#set path to subject textfile (use anat)
+txtfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+matlab -nodisplay -nosplash -nodesktop -r "ants_inverse_xform('$matprocPath', '$templatePath', '$txtfile');exit;"

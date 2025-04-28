@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#initialize freesurfer. set FREESURFER_HOME to where your instance of fs is installed
+FREESURFER_HOME=/usr/local/freesurfer
+source $FREESURFER_HOME/SetUpFreeSurfer.sh #source freesurfer setup script
+
+#set fs output dir. Create it if it doesn't already exist.
+fs_dir='/mnt/acorn/ethan/fsproc'
+if ! test -d $fs_dir; then
+	echo "freesurfer output directory does not exist. Creating..."
+	mkdir $fs_dir
+fi
+
+#set fs input dir. Should be location of acpc-aligned files
+input_dir='/mnt/acorn/ethan/bids'
+
+#read in subject text file
+sub_list=$1
+
+#read in openmp thread count
+openmp=$2
+
+
+for file in `cat $sub_list`; do
+
+	#first, extract the subject ID from the raw file name
+        subFolder='sub-'${file:0:15}
+        #extract timepoint information from raw file name
+        timepoint='ses-'${file:16:18}
+
+	#construct freesurfer output directory based on timepoint
+	output_dir=$fs_dir'/'$timepoint
+	if ! test -d $output_dir; then
+		mkdir $output_dir
+	fi
+
+	#set the output directory to be the freesurfer output path, so it knows where to put finished files
+	export SUBJECTS_DIR=$output_dir
+
+	echo 'RUNNING FREESRUFER ON '$subFolder
+	sub_t1=$input_dir'/'$subFolder'/'$timepoint'/anat/acpc/output/t1.nii.gz' #set input t1 to be acpc-aligned file
+	recon-all -all -openmp $openmp -s $subFolder -i $sub_t1
+	echo 'FINISHED FREESURFER ON '$subFolder
+	echo ''
+done

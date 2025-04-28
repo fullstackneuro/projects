@@ -1,0 +1,85 @@
+#!/bin/bash
+
+## This app will align a T1/T2w image to the ACPC plane (specifically, the MNI152_T1/2_1mm template from
+## FSL using a 6 DOF alignment via FSL commands. This protocol was adapted from the HCP Preprocessing
+## Pipeline (https://github.com/Washington-University/HCPpipelines.git). Requires a T1w image input
+## and outputs an acpc_aligned T1w image.
+
+set -x
+set -e
+
+#set path to raw t1 directory (bids folder)
+t1_dir='/mnt/acorn/ethan/bids'
+
+#set path to textfile containing subjects to process
+sub_list='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+#set path to template for acpc alignment xforms
+template='/mnt/bacon/templates/MNI152_T1_1mm.nii.gz'
+
+#set type of scan to be aligned. For our purposes, T1
+type='T1'
+
+
+for file in `cat $sub_list`; do
+
+	#first, extract the subject ID from the raw file name
+	subFolder='sub-'${file:0:15}
+	#extract timepoint information from raw file name
+	timepoint='ses-'${file:16:18}
+
+
+	echo $subFolder     #print subject folder name to keep track of what subject you're on
+	outdir=$t1_dir'/'$subFolder'/'$timepoint'/anat/acpc'
+	if ! test -d outdir; then
+		mkdir $outdir
+	fi
+
+	input=$t1_dir'/'$subFolder'/'$timepoint'/anat/'$subFolder'_'$timepoint'_run-01_T1w.nii'
+
+	#we use space from
+	#https://bids-specification.readthedocs.io/en/stable/99-appendices/08-coordinate-systems.html#template-based-coordinate-systems
+
+
+	case $template in #check what template is being used. Set path accordingly.
+	nihpd_asym*)
+    		space="NIHPD"
+    		[ $type == "T1" ] && template=/mnt/bacon/templates/nihpd_asym_04.5-18.5_t1w.nii
+    		[ $type == "T2" ] && template=/mnt/bacon/templates/nihpd_asym_04.5-18.5_t2w.nii
+    		;;
+	*)
+    		space="MNI152NLin6Asym"
+    		[ $type == "T1" ] && template=/mnt/bacon/templates/MNI152_T1_1mm
+    		[ $type == "T2" ] && template=/mnt/bacon/templates/MNI152_T2_1mm
+    		;;
+	esac
+
+	case $type in #check input type, name output file accordingly. Defined up top.
+	T1)
+    		output=$outdir'/'output/t1.nii.gz
+    		;;
+	T2)
+    		output=$outdir'/'output/t2.nii.gz
+    		;;
+	esac
+
+	robustfov -i $input -m $outdir'/'roi2full.mat -r $outdir'/'input_robustfov.nii.gz
+	convert_xfm -omat $outdir'/'full2roi.mat -inverse $outdir'/'roi2full.mat
+	flirt -interp spline -in $outdir'/'input_robustfov.nii.gz -ref $template -omat $outdir'/'roi2std.mat -out $outdir'/'acpc_mni.nii.gz
+	convert_xfm -omat $outdir'/'full2std.mat -concat $outdir'/'roi2std.mat $outdir'/'full2roi.mat
+	aff2rigid $outdir'/'full2std.mat $outdir'/'outputmatrix
+
+	mkdir -p $outdir'/'output
+	applywarp --rel --interp=spline -i $input -r $template --premat=$outdir'/'outputmatrix -o $output
+
+	# make png
+	slicer $output -x 0.5 $outdir'/'out_aligncheck.png
+
+	echo "all done!"
+
+
+	#the output that we want from this script is two levels down - under acpc, then output.
+	#important to note - this doesn't always get it right!
+
+
+done

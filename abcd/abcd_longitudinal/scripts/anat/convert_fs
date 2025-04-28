@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#set path to freesurfer directory
+fsPath='/mnt/acorn/ethan/fsproc'
+
+#set path to matproc directory
+matPath='/mnt/acorn/ethan/matproc'
+
+#set path to subject list (use anat)
+txtfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+#loop across subjects
+for file in `cat $txtfile`; do
+
+	#extract subfolder and timepoint from raw filename
+	subFolder='sub-'${file:0:15}
+	timepoint='ses-'${file:16:18}
+
+	#construct subject-level matproc path
+	sub_matPath=$matPath'/'$subFolder'/'$timePoint
+
+	#construct path to freesurfer aseg file output
+	asegPath=$fsPath'/'$timepoint'/'$subFolder'/mri'
+
+	#change to freesurfer directory
+	cd asegPath
+
+	#run mriconvert to generate seg file
+	mri_convert -rl rawavg.mgz -rt nearest -odt int aparc.a2009s+aseg.mgz a2009seg2acpc.nii.gz
+
+	#copy output of mri_convert to matproc ROIs folder
+	cp a2009seg2acpc.nii.gz $sub_matPath'/ROIs/.'
+
+
+done

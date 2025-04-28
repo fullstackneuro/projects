@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#determine total number of cores on machine
+ncores_all=`nproc --all`
+
+#set the number of threads you want to distribute fs across.
+ncores=1
+
+#set the threading that will be passed into run_fs
+openmp=$(( ncores_all/ncores ))
+
+
+#set subject textfile
+sub_list='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+#initialize command string to execute
+cmdstring=""
+
+#if ncores is greater than 1, will divide freesurfer across multiple cores to parallelize.
+#this makes things a bit faster in the case of many subjects
+if [ $ncores -gt 1 ]; then
+	#start by splitting text file
+	#compute length of each subfile
+	nsubs=`cat $sub_list | wc -l` #this is simply counting the number of lines in the subject text file
+	nfiles=$(( nsubs / ncores ))
+	nfiles=$(( nfiles + 1 )) #add one for padding. Just in case the division above rounds down
+	split $sub_list -l $nfiles ${sub_list/.txt/}'_' -a 2 --numeric-suffixes=1 #splits file into subfiles, with suffixes after the underscore
+
+	#append each sublist into the command string to be executed
+	for ((num=1;num<nfiles;num++)); do
+		if [ $nfiles -lt 10 ]; then
+			numstring="0"$num #adds zero-padding in the case that the file was subdivided less than ten times
+		else
+			numstring=$num
+		fi
+		cmdstring=$cmdstring" gnome-terminal -- ./run_fs "${sub_list::-4}"_"$numstring" "$openmp" &" #sequentially opens terminals, runs recon_all
+	done
+	cmdstring=${cmdstring::-2}
+
+
+#if ncores = 1, will simply pass in the sub_list as is. Will run only one instance of recon-all
+else
+	cmdstring="./run_fs "$sub_list" "$openmp
+fi
+
+echo $cmdstring #echo the command string to make sure it's correct
+eval $cmdstring #execute the command string through the shell
