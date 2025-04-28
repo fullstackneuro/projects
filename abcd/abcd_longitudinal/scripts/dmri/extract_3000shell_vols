@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#set path to matproc output. Create if does not exist already.
+out_dir='/mnt/acorn/ethan/matproc'
+if ! test -d $out_dir; then
+	mkdir $out_dir
+fi
+
+#set path to raw diffusion data (should be bids)
+input_dir='/mnt/acorn/ethan/bids'
+
+#set path to subject text file
+sub_list='/mnt/acorn/ethan/scripts/dmri/subs.txt'
+
+
+for file in `cat $sub_list`; do
+
+	#extract subject ID from raw file name
+	subFolder='sub-'${file:0:15}
+	#extract timepoint from raw file name
+	timepoint='ses-'${file:16:18}
+
+	#these will be the first files we place in the subject's matproc folder. Check if their folder exists under matproc. If not, make it.
+	if ! test -d $out_dir/$subFolder; then
+		mkdir $out_dir/$subFolder
+		mkdir $out_dir/$subFolder/$timepoint
+		mkdir $out_dir/$subFolder/$timepoint/raw
+	fi
+
+
+	#if subject has run 1 and hasn't already been processed...
+	if test -f $input_dir/$subFolder/$timepoint/dwi/shell3000_run1.txt && ! test -f $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run1.nii.gz'; then
+		echo $subFolder' run 1'
+		fslselectvols -i `ls -fd $input_dir/$subFolder/$timepoint/dwi/* | grep run-01_dwi.nii` -o $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run1.nii.gz' --vols=`cat $input_dir/$subFolder/$timepoint/dwi/shell3000_run1.txt`
+		echo 'finished run 1'
+	fi
+
+	#if subject has run 2 and hasn't already been processed...
+        if test -f $input_dir/$subFolder/$timepoint/dwi/shell3000_run2.txt && ! test -f $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run2.nii.gz'; then
+                echo $subFolder' run 2'
+                fslselectvols -i `ls -fd $input_dir/$subFolder/$timepoint/dwi/* | grep run-02_dwi.nii` -o $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run2.nii.gz' --vols=`cat $input_dir/$subFolder/$timepoint/dwi/shell3000_run2.txt`
+                echo 'finished run 2'
+
+
+		#if 2 runs, then combine runs 1 and 2 and save out to matproc folder
+		echo 'running merge for '$subFolder'...'
+		fslmerge -t $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.nii.gz' $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run1.nii.gz' $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run2.nii.gz' #-t indicates merge in time
+		echo 'finished merging'
+
+	#if only 1, copy that run to final folder and name accordingly
+	elif ! test -f $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.nii.gz'; then
+
+		cp $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell_run1.nii.gz' $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.nii.gz'
+
+
+	fi
+
+	#while we're at it, copy over modified bval and bvec files too. mrtrix needs them.
+	if ! test -f $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.bval'; then
+		cp $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell.bval' $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.bval'
+	fi
+
+	if ! test -f $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.bvec'; then
+        	cp $input_dir/$subFolder/$timepoint/dwi/$subFolder'_3000shell.bvec' $out_dir/$subFolder/$timepoint/raw/$subFolder'_dwi.bvec'
+	fi
+
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#set path to fullshell dmri data (probably bids)
+projpath='/mnt/acorn/ethan/bids'
+
+#set path to subject textfile containing subjects to run
+txtfile='/mnt/acorn/ethan/scripts/dmri/subs.txt'
+
+Rscript --vanilla extract_3000shell_bvalvecs.R $projpath $txtfile

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#set path to location of tar files
+tar_path='/mnt/bacon/raw/abcd/dmri/Package_1224143/fmriresults01/abcd-mproc-release5'
+
+#set path to location to untar (shoudl be a bids folder)
+extract_path='/mnt/acorn/ethan/bids'
+
+#set path to list of subject files to untar
+sub_list='/mnt/acorn/ethan/scripts/dmri/subs.txt'
+
+
+
+#move into the directory for file placement
+cd $extract_path
+
+#loop through subject files, untar from tar location to extract location
+for file in `cat $sub_list`; do
+	echo $file #print out working file to terminal
+	tar_file=$tar_path'/'$file #construct path to subject tar file
+	tar -xf $tar_file #untar subject file
+
+
+	#abcd data is organized in bids format already
+done

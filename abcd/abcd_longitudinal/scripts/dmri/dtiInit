@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## Establish path to bids folder
+bidsDir='/mnt/acorn/ethan/bids'
+
+## Establish path to matproc folder
+matprocDir='/mnt/acorn/ethan/matproc'
+
+## establish textfile path. Use anat textfile this time, since it'll contain every subject only once
+subfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+## run matlab script for dtiInit
+matlab -nodisplay -nosplash -nodesktop -r "dtiInit('$bidsDir', '$matprocDir', '$subfile');exit;"
