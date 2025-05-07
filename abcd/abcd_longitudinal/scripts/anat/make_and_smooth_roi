@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#initialize freesurfer. set FREESURFER_HOME to where your instance of fs is installed
+FREESURFER_HOME=/usr/local/freesurfer
+source $FREESURFER_HOME/SetUpFreeSurfer.sh #source freesurfer setup script
+
+# set path to matproc directory
+matprocPath='/mnt/acorn/ethan/matproc'
+
+# set path to subject textfile
+txtfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+# first run script to merge ains rois
+matlab -nodisplay -nosplash -nodesktop -r "merge_ains_rois('$matprocPath', '$txtfile');exit;"
+
+# next run script to create global white matter mask
+matlab -nodisplay -nosplash -nodesktop -r "make_wmmask('$matprocPath', '$txtfile');exit;"
+
+# then run script to smooth all relevant rois
+matlab -nodisplay -nosplash -nodesktop -r "smooth_roi('$matprocPath', '$txtfile');exit;"

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#set path to matproc directory
+matPath='/mnt/acorn/ethan/matproc'
+
+#set path to subject text file
+txtfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+#run matlab script to extract ROIs from seg nii file
+matlab -nodisplay -nosplash -nodesktop -r "fs_dtiConvFSroi2mat('$matPath', '$txtfile');exit;"

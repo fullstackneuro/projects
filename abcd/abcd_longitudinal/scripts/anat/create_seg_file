@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#initialize freesurfer.
+FREESURFER_HOME=/usr/local/freesurfer
+source $FREESURFER_HOME/SetUpFreeSurfer.sh
+
+# establish path to freesurfer dir
+fsDir='/mnt/acorn/ethan/fsproc'
+
+# establish path to matproc dir
+matprocDir='/mnt/acorn/ethan/matproc'
+
+# establish path to subject text file
+sublist='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+
+# loop across subjects in subject text file
+for file in `cat $sublist`; do
+
+	# construct subject ID, timepoint from raw file name
+	subName='sub-'${file:0:15}
+	timepoint='ses-'${file:16:18}
+
+	echo $subName
+
+	# filepath setup. mgz inputs and nii output.
+	seg_from=$fsDir'/'$timepoint'/'$subName'/mri/aparc.a2009s+aseg.mgz'
+	raw_from=$fsDir'/'$timepoint'/'$subName'/mri/rawavg.mgz'
+	seg_to=$matprocDir'/'$subName'/'$timepoint'/ROIs/a2009seg2acpc.nii.gz'
+
+	# run mri_convert to convert mgz seg file to nii seg file that can be
+	# passed into matlab for ROI extraction
+	mri_convert -rl $raw_from -rt nearest -odt int $seg_from $seg_to
+
+done
