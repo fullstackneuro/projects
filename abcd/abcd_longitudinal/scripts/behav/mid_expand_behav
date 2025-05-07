@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#set path to raw behav file dir (should be in bids)
+bidsPath='/mnt/acorn/ethan/bids'
+
+#set output dir (should be afniproc)
+afniPath='/mnt/acorn/ethan/afniproc'
+
+#set path to subject list text file
+sublist='/mnt/acorn/ethan/scripts/behav/subs.txt'
+
+
+Rscript --vanilla mid_expand_behav.R $bidsPath $afniPath $sublist
