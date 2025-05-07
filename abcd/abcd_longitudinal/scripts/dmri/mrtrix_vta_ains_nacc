@@ -1,0 +1,10 @@
+#!/bin/bash
+
+## Establish path to matproc folder
+matprocDir='/mnt/acorn/ethan/matproc'
+
+## Establish path to textfile. Again, use anat. 1 file per sub
+subfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+## Run matlab script for dtiInit
+matlab -nodisplay -nosplash -nodesktop -r "mrtrix_vta_ains_nacc('$matprocDir', '$subfile');exit;"

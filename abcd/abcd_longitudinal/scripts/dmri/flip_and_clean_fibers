@@ -1,0 +1,15 @@
+#!/bin/bash
+
+## Establish path to matproc folder
+matprocDir='/mnt/acorn/ethan/matproc'
+
+## Establish path to subject folder
+subfile='/mnt/acorn/ethan/scripts/anat/subs.txt'
+
+## run scripts to flip fibers
+matlab -nodisplay -nosplash -nodesktop -r "reorient_vtanacc_fibers('$matprocDir', '$subfile');exit;"
+matlab -nodisplay -nosplash -nodesktop -r "reorient_ainsnacc_fibers('$matprocDir', '$subfile');exit;"
+
+## run scripts to trim fibers
+matlab -nodisplay -nosplash -nodesktop -r "clean_vtanacc_outliers('$matprocDir', '$subfile');exit;"
+matlab -nodisplay -nosplash -nodesktop -r "clean_ainsnacc_outliers('$matprocDir', '$subfile');exit;"
