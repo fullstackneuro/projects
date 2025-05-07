@@ -1,0 +1,160 @@
+#!/bin/bash
+
+#set path to output directory for afni processing
+afni_path="/mnt/acorn/ethan/afniproc"
+
+#create afni directory if it does not already exist
+if ! test -d $afni_path; then
+	mkdir $afni_path
+fi
+
+#set path to bids directory, where raw mid fmri data is kept
+bids_path="/mnt/acorn/ethan/bids"
+
+#set path to subject text file
+sub_list="/mnt/acorn/ethan/scripts/fmri/subs.txt"
+
+#set path to template brains for warp
+tal_template="/mnt/acorn/psyc/atlas/TT_N27+tlrc."
+nihpd_template="/mnt/bacon/templates/nihpd_ns.nii.gz"
+mni_template="/mnt/bacon/templates/mni_ns.nii.gz"
+
+
+#loop across subjects in subject text file
+for subject in `cat $sub_list`; do
+
+		#extract subject ID from raw file name
+		subname="sub-"${subject:0:15}
+		#extract session timepoint
+		timepoint="ses-"${subject:16:18}
+
+		#check if subject folder and session folder exist. If not, create them.
+		if ! test -d $afni_path'/'$subname; then
+			mkdir $afni_path'/'$subname
+		fi
+		if ! test -d $afni_path'/'$subname'/'$timepoint; then
+			mkdir $afni_path'/'$subname'/'$timepoint
+		fi
+
+		if ! test -f $afni_path'/'$subname'/'$timpepoint'/mid_mbnf+orig.BRIK'; then
+
+
+			#need to copy over raw mid scan 1, raw mid scan 2, and t1 file for afni preprocessing.
+			echo "copying subject t1 file to afnidir..."
+			cp $bids_path'/'$subname'/'$timepoint'/anat/'$subname'_'$timepoint*'.nii' $afni_path'/'$subname'/'$timepoint'/t1.nii.gz'
+
+			echo "copying subject mid files to afnidir..."
+			cp $bids_path'/'$subname'/'$timepoint'/func/'$subname'_'$timepoint'_task-mid_run-01_bold.nii' $afni_path'/'$subname'/'$timepoint'/mid1.nii.gz'
+        	        cp $bids_path'/'$subname'/'$timepoint'/func/'$subname'_'$timepoint'_task-mid_run-02_bold.nii' $afni_path'/'$subname'/'$timepoint'/mid2.nii.gz'
+
+
+			#check if subject has two scans of mid.
+			if test -f $afni_path'/'$subname'/'$timepoint'/mid2.nii.gz'; then
+
+				#display the subject in work
+				echo $subname
+				cd $afni_path'/'$subname'/'$timepoint
+
+				#convert anatomical scan to brick and header
+				if test -f anat+orig.HEAD; then
+		        		rm -rf anat+orig*
+		        	fi
+
+		        	3dcopy 't1.nii.gz' anat
+
+				#convert files to ANFI, cut off leadin/leadout
+				if test -f epi1+orig.HEAD; then
+					rm -rf epi?+orig*
+				fi
+
+				#cut the first 10 TRs (so indices 10-410)
+				3dTcat -prefix epi1 'mid1.nii.gz[10..410]'
+				3dTcat -prefix epi2 'mid2.nii.gz[10..410]'
+
+				#refitting + slice time correction
+				3drefit -TR 0.8 epi1+orig.
+				3drefit -TR 0.8 epi2+orig.
+
+				if test -f epits1+orig.HEAD; then
+					rm -rf epits?+orig*
+				fi
+
+				3dTshift -slice 0 -tpattern altplus -prefix epits1 epi1+orig.
+				3dTshift -slice 0 -tpattern altplus -prefix epits2 epi2+orig.
+
+				#rm -rf epi?+orig*
+
+				#pre-clean
+
+				if test -f mid+orig.HEAD; then
+					rm -rf mid+orig*
+				fi
+
+				#create concatenated dataset
+				3dTcat -prefix mid epits1+orig epits2+orig
+
+				#rm -rf epits?+orig*
+
+				#correct for motion
+
+				if test -f mid_m+orig.HEAD; then
+					rm -rf mid_m+orig*
+				fi
+
+				if test -f 3dmotionmid.1D; then
+					rm -rf 3dmotionmid.1D
+				fi
+
+				3dvolreg -Fourier -twopass -prefix mid_m -base 3 -dfile 3dmotionmid.1D mid+orig
+
+				#smooth spatially
+				if test -f mid_mb+orig.HEAD; then
+					rm -rf mid_mb+orig*
+				fi
+
+				3dmerge -prefix mid_mb -1blur_fwhm 4 -doall mid_m+orig
+
+				#normalize (calculate pct signal change / average) and filter
+
+				if test -f mid_mbn+orig.BRIK; then
+					rm -rf mid_mbn+orig*
+				fi
+
+				if test -f mid_ave+orig.BRIK; then
+					rm -rf mid_ave+*
+				fi
+
+				#should end at 801
+				3dTstat -prefix mid_ave 'mid_mb+orig[0..801]'
+				3drefit -abuc mid_ave+orig
+				3dcalc -datum float -a 'mid_mb+orig[0..801]' -b mid_ave+orig -expr "((a-b)/b)*100" -prefix mid_mbn
+
+
+				#high pass filter
+				if test -f mid_mbnf+orig.HEAD; then
+					rm -rf mid_mbnf+orig.*
+				fi
+
+
+				3dTproject -prefix mid_mbnf -stopband 0 .011 -input mid_mbn+orig
+
+
+				#talairach warping
+
+				#preclean directory
+
+				if test -f anat+tlrc.HEAD; then
+					rm -rf anat+tlrc.*
+				fi
+
+
+				@auto_tlrc -warp_orig_vol -suffix NONE -base $tal_template -input anat+orig.
+                		@auto_tlrc -warp_orig_vol -suffix nihpd -base $nihpd_template -input anat+orig
+				@auto_tlrc -warp_orig_vol -suffix mni -base $mni_template -input anat+orig
+
+				#set the epi parent to the auto-warped anat
+				3drefit -apar anat+orig mid_mbnf+orig
+			fi
+
+		fi
+done
