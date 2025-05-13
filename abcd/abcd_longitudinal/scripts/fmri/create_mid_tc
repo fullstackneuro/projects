@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#set path to afni dir
+afniPath='/mnt/acorn/ethan/afniproc'
+
+#set path to subject list
+sublist='/mnt/acorn/ethan/scripts/behav/subs.txt'
+
+#run R-script which generates timecourses
+Rscript --vanilla create_mid_tc.R $afniPath $sublist

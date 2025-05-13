@@ -1,0 +1,70 @@
+Description: This set of scripts is responsible for preprocessing subject functional mri data for the Monetary Incentive Delay (MID) task.
+It includes programs for untarring, afni preprocessing steps, ROI timecourse generation, and timecourse 1D file generation.
+The order of scripts provided here is strictly necessary. That is, each following script depends on outputs from the preceding script to function properly.
+For a subject who has not yet been processed, the order of operations is as follows:
+
+
+
+untar_mid_fmri: This script takes three parameters which are available for editing up top.
+		The path is the path to the subject tar raw files.
+		The extract path is the location in which to place the untarred raw functional data (should be bids).
+		The sub list is a textfile containing subject raw files to untar, delimited by new lines.
+		NOTE: ABCD aquired MID data in two blocks, meaning two scans. As such, each subject at each timepoint should have two .tgz files.
+		BOTH of these files need to be present in the subject textfile. Subsequent scripts that use this same subject list include checks
+		to ensure that each subject is only run once, but both need to be untarred for the subject to have a full set of FMRI data to process.
+		Running this script will create an extract (bids) directory for the functional data, and place the subject's FMRI files in a subject folder within that directory.
+
+
+
+
+
+
+*********************************************************************************************************************************************************************************************************
+NOTE: THIS IS THE EXTENT OF SCRIPTS THAT CAN BE RUN BEFORE RUNNING ANATOMICAL PREPROCESSING. ALL THE FOLLOWING SCRIPTS REQUIRE ANAT BE RUN AT LEAST THROUGH RAW T1 EXTRACTION.
+*********************************************************************************************************************************************************************************************************************************************
+
+
+
+
+
+
+mid_afni_preproc: This script uses the raw functional nifti files to generate AFNI-compatible preprocessed functional data. It performs a series of operations including:
+		Copying the raw T1 file from the anat bids folder to the fmri bids folder.
+		truncating the MID scans to exclude lead-in time.
+		Performing slice-time correction to account for timing differences when slices were acquired for a given volume.
+		Concatenating the two runs of MID into a single, temporally continuous file.
+		Motion regression to correct for movement during the scans.
+		Spatial smoothing to reduce noise of high spatial frequency.
+		Normalize the signal in time so that values indicate deviations from the average signal across the whole scan
+		Perform high-pass filtering to reduce regular noise with long wave-form.
+		Yolk the functional data to the anatomy file, and compute transforms into sets of standard space relevant for ROI signal extraction.
+		This script takes six parameters.
+		The afni path is the path to the afniproc folder, where outputs will be placed.
+		The bids path is the path to the bids folder, where the script will look for raw FMRI inputs.
+		The subject list contains a list of raw files pertaining to what subjects to run, two per subject.
+		The tal template is a Talairach template brain for anatomical transform.
+		The nihpd tempalte is an NIH pediatric template brain for anatomical transform.
+		The mni template is an MNI152 template brain for anatomical transform.
+		There are many outputs of this script, but the pertinent outputs are the mid_mbnf BRIK and HEADER files that are used later to produce timecourses.
+
+
+timecourse_1D_files: This script generates 1D timecourses across the entire MID scan for ROIs relevant to our analyses (namely nacc, ains, vta, and mpfc).
+		This script takes 8 parameters.
+		The afnipath is the directory in which the subject's afni preprocessing outputs are located.
+		The maskPath is the directory to standard-space mask files, used in ROI timecourse extraction.
+		The textfile is a list of subject raw files indicating which subjects to process.
+		The mni anatfile is the anatomy file yolked to the MNI standard brain.
+		The nihpd anatfile is the anatomy file yolked to the NIH pediatric standard brain.
+		The mni masks are mask files in mni standard space, found in the folder indicated by maskPath.
+		The nihpd mask is the vta mask in nihpd standard space, also found in the folder indicated by maskPath.
+		The regfile is the preprocessed mid functional data (i.e., mid_mbnf).
+		Outputs of this script are 1D textfiles containing timecourses for each ROI for left, right, and both hemispheres.
+
+
+create_mid_tc: This script is responsible for taking the 1D files created by timecourse_1D_files, and merging it with the behavior data from the MID task.
+		It is a wrapper for an R script. This script should not require modification, but is present in this same scripts folder for inspection and editing should the need arise.
+		This script takes two parameters.
+		The afniPath is the path to the afniproc folder, where the 1D timecourses and preprocessed MID data is stored.
+		The sublist is a text file containing subject raw files, indicating which subjects to run. NOTE: THIS IS THE SUBS FILE FOUND IN BEHAVIOR, NOT FMRI.
+		The output of this script is a merged behavior/timecourse file.
+		 

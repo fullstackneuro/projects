@@ -1,0 +1,76 @@
+#!/bin/bash
+
+#set path to afni dir
+afniPath='/mnt/acorn/ethan/afniproc'
+
+#set path to mask dir
+maskPath='/mnt/bacon/templates/masks/abcd'
+
+#set subject textfile
+txtfile='/mnt/acorn/ethan/scripts/fmri/subs.txt'
+
+
+mni_anatfile='anatmni'
+nihpd_anatfile='anatnihpd'
+mni_masks=('nacc8mm_mni' 'ains8mm_mni' 'ains8mmkg_mni' 'mpfc8mm_mni')
+nihpd_mask='vtapbp_nihpd_short'
+regfile='mid_mbnf'
+
+for sub in `cat $txtfile`; do
+
+	subName='sub-'${sub:0:15}
+	timepoint='ses-'${sub:16:18}
+
+	echo $subName
+
+	cd $afniPath'/'$subName'/'$timepoint
+
+	#produce timecourses for each of the mni masks
+	for maskfile in ${mni_masks[@]}; do
+
+		if test -e ${regfile}_${maskfile}+orig.HEAD; then
+			rm ${regfile}_${maskfile}+orig*
+		fi
+
+		3dfractionize -template ${regfile}+orig -input $maskPath'/'$maskfile+tlrc -warp ${mni_anatfile}+tlrc \
+			-clip 0.1 -preserve -prefix ${regfile}_${maskfile}
+
+		if test -e l${maskfile}.tc; then
+			rm l${regfile}_${maskfile}.1D
+		fi
+		if test -e r${maskfile}.tc; then
+			rm r${regfile}_${maskfile}.1D
+		fi
+		if test -e b${maskfile}.tc; then
+			rm b${regfile}_${maskfile}.1D
+		fi
+
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 1 1 ${regfile}+orig > l${regfile}_${maskfile}.1D
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 2 2 ${regfile}+orig > r${regfile}_${maskfile}.1D
+		3dmaskave -mask ${regfile}_${maskfile}+orig -quiet -mrange 1 2 ${regfile}+orig > b${regfile}_${maskfile}.1D
+	done
+
+	#produce timecourses for the vta nihpd mask
+	if test -e ${regfile}_${nihpd_mask}+orig.HEAD; then
+		rm ${regfile}_${nihpd_mask}+orig*
+
+	fi
+
+	3dfractionize -template ${regfile}+orig -input $maskPath'/'${nihpd_mask}+tlrc -warp ${nihpd_anatfile}+tlrc\
+		-clip 0.1 -preserve -prefix ${regfile}_${nihpd_mask}
+
+	if test -e l${nihpd_mask}.tc; then
+		rm l${regfile}_${nihpd_mask}.1D
+	fi
+	if test -e r${nihpd_mask}.tc; then
+		rm r${regfile}_${nihpd_mask}.1D
+	fi
+	if test -e b${nihpd_mask}.tc; then
+		rm b${regfile}_${nihpd_mask}.1D
+	fi
+
+	3dmaskave -mask ${regfile}_${nihpd_mask}+orig -quiet -mrange 1 1 ${regfile}+orig > l${regfile}_${nihpd_mask}.1D
+	3dmaskave -mask ${regfile}_${nihpd_mask}+orig -quiet -mrange 2 2 ${regfile}+orig > r${regfile}_${nihpd_mask}.1D
+	3dmaskave -mask ${regfile}_${nihpd_mask}+orig -quiet -mrange 1 2 ${regfile}+orig > b${regfile}_${nihpd_mask}.1D
+
+done
