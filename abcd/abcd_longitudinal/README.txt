@@ -1,1 +1,1 @@
-
+This set of scripts is designed to preprocess various modalities of ABCD data to allow for diffusion tractography and MID raw timecourse analysis. The scripts are divided into groups based on modality, and each set of scripts contains a separate README file describing what each script does and in what order to run them.
