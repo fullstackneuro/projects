@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# establish dti folder name (should be dti60trilin for everybody except philips)
+dtiDir='dti60trilin'
+
+# establish output directory for compiled tract profile statistics
+outDir='/mnt/acorn/ethan/stats'
+
+# if output directory does not exist, make it.
+if ! test -d $outDir; then
+	mkdir $outDir
+fi
+
+# establish path to matproc directory
+baseDir='/mnt/acorn/ethan/matproc'
+
+# establish path to subject text file
+txtfile='/mnt/acorn/ethan/scripts/dmri/subs.txt'
+
+#run matlab script
+matlab -nodisplay -nosplash -nodesktop -r "create_tractprofiles('$dtiDir', '$outDir', '$baseDir', '$txtfile');exit;"
