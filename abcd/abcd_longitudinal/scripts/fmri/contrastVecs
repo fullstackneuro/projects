@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#set path to afniproc folder
+afnipath='/mnt/acorn/ethan/afniproc'
+
+#set path to bids folder
+bidspath='/mnt/acorn/ethan/bids'
+
+#set path to list of subject files to process. Use behavior list.
+sublist='/mnt/acorn/ethan/scripts/behav/subs.txt'
+
+#run R script to generate contrast vectors for regression
+Rscript --vanilla generate_contrastVecs.R $afnipath $bidspath $sublist
